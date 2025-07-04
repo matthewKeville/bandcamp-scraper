@@ -30,7 +30,6 @@
 
   <properties>
     <java.version>21</java.version>
-    <maven.test.skip>false</maven.test.skip>
   </properties>
 
   <build>
@@ -44,7 +43,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
+        <version>3.14.0</version>
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
