@@ -1,9 +1,5 @@
 package bandcamp_scraper_models;
 
-import java.util.List;
-import java.util.Set;
-
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,11 +13,5 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
-public class Artist {
-
-  private String name;
-  private String location;
-  private Set<ReleaseItem> releases;
-
+public final class Release extends ReleaseItem {
 }

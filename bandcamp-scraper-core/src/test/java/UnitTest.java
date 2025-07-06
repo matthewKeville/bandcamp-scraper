@@ -1,12 +1,15 @@
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 import bandcamp_scraper_core.scraper.artist.ArtistScraper;
 import bandcamp_scraper_core.scraper.artist.ArtistScraperSingleThreaded;
 import bandcamp_scraper_models.Artist;
+import bandcamp_scraper_models.ReleaseItem;
+import bandcamp_scraper_models.ReleaseLink;
 
 public class UnitTest {
 
@@ -14,16 +17,27 @@ public class UnitTest {
 void getArtist() {
 
     //Arrange
-    Artist expected = new Artist("Teenage Halloween","Asbury Park, NJ",Collections.emptyList());
+    Artist.ArtistBuilder builder = Artist.builder()
+      .name("Teenage Halloween")
+      .location("Asbury Park, New Jersey");
+
+    Set<ReleaseItem> releases = new HashSet<ReleaseItem>();
+    releases.add(new ReleaseLink("/album/till-you-return"));
+    releases.add(new ReleaseLink("/album/the-homeless-gospel-choir-teenage-halloween"));
+    releases.add(new ReleaseLink("/album/eternal-roast"));
+    releases.add(new ReleaseLink("/album/teenage-halloween"));
+    builder.releases(releases);
+      
+
+    Artist expected = builder.build();
     ArtistScraper artistScraper = new ArtistScraperSingleThreaded();
 
     //Act
-    Artist actual = artistScraper.scrapeArtist("https://fake-artist");
+    Artist actual = artistScraper.scrapeArtist("https://teenagehalloween.bandcamp.com/music");
 
     //Asset
-    //do actually assertions here when lombok is added to the project
+    assertThat(expected).usingRecursiveComparison().isEqualTo(actual);
 
-    assertTrue(true);
 }
 
 }
