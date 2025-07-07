@@ -6,7 +6,6 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- Reference to the parent POM for version and dependency management -->
   <parent>
     <groupId>com.keville</groupId>
     <artifactId>bandcamp-scraper</artifactId>
@@ -17,34 +16,32 @@
   <artifactId>bandcamp-scraper-client</artifactId>
   <name>bandcamp-scraper-client</name>
   <description>Spring Boot application to run the Bandcamp scraper</description>
-  <packaging>jar</packaging> <!-- Packaging as a Spring Boot executable JAR -->
+  <packaging>jar</packaging>
 
   <dependencies>
 
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter</artifactId>
-    </dependency>
+    <!-- inherit -->
 
     <dependency>
       <groupId>com.keville</groupId>
       <artifactId>bandcamp-scraper-core</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>com.keville</groupId>
       <artifactId>bandcamp-scraper-models</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+    <!-- unique -->
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+      <version>3.5.3</version>
     </dependency>
 
   </dependencies>
 
-  <build>
-
-    <plugins>
-    </plugins>
-
-  </build>
+  <build></build>
 
 </project>

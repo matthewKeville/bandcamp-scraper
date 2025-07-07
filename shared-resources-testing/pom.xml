@@ -13,26 +13,9 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>bandcamp-scraper-models</artifactId>
-  <name>bandcamp-scraper-models</name>
+  <artifactId>shared-resources-testing</artifactId>
+  <name>shared-resources-testing</name>
   <description></description>
   <packaging>jar</packaging>
-
-  <dependencies>
-
-    <!-- inherit -->
-
-    <!-- unique -->
-
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>1.18.38</version>
-        <scope>provided</scope>
-    </dependency>
-
-  </dependencies>
-
-  <build></build>
 
 </project>

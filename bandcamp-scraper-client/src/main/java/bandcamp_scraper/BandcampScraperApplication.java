@@ -8,7 +8,6 @@ public class BandcampScraperApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(BandcampScraperApplication.class, args);
-    System.out.println("hello");
   }
 
 }

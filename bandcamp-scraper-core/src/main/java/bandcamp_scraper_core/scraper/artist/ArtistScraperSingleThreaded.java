@@ -9,17 +9,18 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import bandcamp_scraper_core.exceptions.scraping.ScrapingException;
 import bandcamp_scraper_core.utils.selenium.DriverUtils;
 import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.ReleaseLink;
 
-@Component
 public class ArtistScraperSingleThreaded implements ArtistScraper {
 
   private WebDriver driver;
+  private Logger LOG = LoggerFactory.getLogger(ArtistScraperSingleThreaded.class);
 
   public Artist scrapeArtist(String url) {
 
@@ -43,12 +44,12 @@ public class ArtistScraperSingleThreaded implements ArtistScraper {
       var ecp = DriverUtils.findElmCountPair(driver,By.id("music-grid"));
       if ( ecp.getCount() > 0 ) {
         if (ecp.getCount() > 1 ) {
-          //LOG WARN : Unexpect number of elements
+          LOG.warn("found multiple #music-grid elements");
         }
         WebElement elmMusicGrid = ecp.getElm();
         List<WebElement> elmsReleaseLink = elmMusicGrid.findElements(By.cssSelector("li a"));
         if ( elmsReleaseLink.size() == 0 ) {
-          //LOG WARN : No releases found
+          LOG.warn("no releases found");
         }
         builder.releases(elmsReleaseLink.stream().map( elmA -> new ReleaseLink(elmA.getDomAttribute("href"))).collect(Collectors.toSet()));
 
@@ -61,17 +62,14 @@ public class ArtistScraperSingleThreaded implements ArtistScraper {
       ecp = DriverUtils.findElmCountPair(driver,By.id("rightColumn"));
 
       if (ecp.getCount() > 0) {
+        LOG.info("found sidebar");
         if (ecp.getCount() > 1) {
-          //LOG WARN : Unexpect number of elements with ID "rightColumn"
+          LOG.warn("found multiple #rightColumn elements");
         }
         scrapeSidebar(ecp.getElm(),builder);
       } else {
-        //LOG WARN : No Sidebar
+        LOG.info("no side bar present");
       }
-
-      //sanity check
-      String title = driver.getTitle();
-      System.out.println("mtk title is " + title);
 
       return builder.build();
 
@@ -89,36 +87,29 @@ public class ArtistScraperSingleThreaded implements ArtistScraper {
   }
 
   private void scrapeSidebar(WebElement element,Artist.ArtistBuilder builder) {
-    //REPLACE WITH SLFJ :  LOG INFO : Sidebar found, scraping sidebar.
-    
+
     //location
     
     var ecp = DriverUtils.findElmCountPair(driver, By.id("band-name-location"));
     if ( ecp.getCount() > 0 ) {
-      //REPLACE WITH SLFJ : LOG TRACE  : band-name-location found
-      System.out.println("band-name-location found");
+      LOG.debug("#band-name-location element found");
       if ( ecp.getCount() > 1 ) {
-        //REPLACE WITH SLFJ : LOG WARN  : Unexpected number of elements
-        System.out.println("unexpected number of band-name-location");
+        LOG.warn("found multiple #band-name-location elements");
       }
       WebElement elmBandNameLocation = ecp.getElm();
       ecp = DriverUtils.findElmCountPair(driver, By.cssSelector(".location.secondaryText"));
       if (ecp.getCount() > 0 ) {
-        //REPLACE WITH SLFJ : LOG TRACE  : Unexpected number of elements
-        System.out.println("location text found");
+        LOG.debug(".location found");
         if ( ecp.getCount() > 1 ) {
-        //REPLACE WITH SLFJ : LOG WARN  : Unexpected number of elements
-        System.out.println("unexpected number of .locationSecondaryText");
+          LOG.warn("found multiple .location.SecondaryText elements");
         }
         String locationText = ecp.getElm().getText();
         builder.location(locationText);
       } else {
-        //REPLACE WITH SLFJ : LOG WARN  : No location text
-        System.out.println("no location text");
+        LOG.warn("no location text present");
       }
     } else {
-      //REPLACE WITH SLFJ : LOG WARN  : No name-location data 
-        System.out.println("no location data");
+        LOG.warn("no location data present");
     }
 
 

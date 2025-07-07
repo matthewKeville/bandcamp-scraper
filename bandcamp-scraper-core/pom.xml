@@ -20,24 +20,39 @@
 
   <dependencies>
 
+    <!-- inherit -->
+
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter</artifactId>
+      <groupId>com.keville</groupId>
+      <artifactId>bandcamp-scraper-models</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.keville</groupId>
+      <artifactId>shared-resources-testing</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.9.1</version>
-      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
+
+    <dependency> 
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
     </dependency>
 
     <dependency>
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
-        <version>3.27.3</version>
-        <scope>test</scope>
     </dependency>
+
+    <!-- unique -->
 
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
@@ -45,29 +60,9 @@
       <version>4.33.0</version>
     </dependency>
 
-    <dependency>
-      <groupId>com.keville</groupId>
-      <artifactId>bandcamp-scraper-models</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
 
   </dependencies>
 
-  <build>
-
-    <plugins>
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.2.5</version>
-          <configuration>
-              <includes>
-                  <include>**/*Test*.java</include>
-              </includes>
-          </configuration>
-      </plugin>
-    </plugins>
-
-  </build>
+  <build></build>
 
 </project>
