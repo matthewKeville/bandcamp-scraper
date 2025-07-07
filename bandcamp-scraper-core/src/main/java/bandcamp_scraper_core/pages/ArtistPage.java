@@ -31,6 +31,7 @@ public class ArtistPage {
     this.driver = driver;
   }
 
+  //TODO : probably should throw if artistName is null
   public String getArtistName() throws NoSuchElementException {
     WebElement elmMetaTagSiteName = driver.findElement(elmMetaTagSiteNameLocator);
     String artistName = elmMetaTagSiteName.getDomAttribute("content");
