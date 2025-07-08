@@ -1,15 +1,12 @@
-package integration;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import bandcamp_scraper_core.scraper.album.AlbumScraper;
 import bandcamp_scraper_core.scraper.album.AlbumScraperSingleThreaded;
 import bandcamp_scraper_models.Album;
 
-public class AlbumScraperIntegrationTest {
+public class AlbumScraperIT {
 
 private String scrapeAlbumTestIntent(String albumName) {
   return "Scraped album data should match expected data for " + albumName;

@@ -1,11 +1,8 @@
-package integration;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import bandcamp_scraper_core.scraper.artist.ArtistScraper;
@@ -14,7 +11,7 @@ import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.ReleaseItem;
 import bandcamp_scraper_models.ReleaseLink;
 
-public class ArtistScraperIntegrationTest {
+public class ArtistScraperIT {
 
 private String scrapeArtistTestIntent(String artistName) {
   return "Scraped artist data should match expected data for " + artistName;
