@@ -26,4 +26,22 @@ public class DriverUtils {
     return new ElmCountPair(elm, elms.size());
   }
 
+  /**
+   *
+   * Wrapper Utility around WebElement.findElements(By by) to return
+   * a default first element or null reference and the count of occurrences.
+   *
+   * @param startElm : A WebElement
+   * @param by : A By instance
+   * @return ElmCountPair : First WebElement reference or null and count of occurences
+   */
+  public static ElmCountPair findElmCountPairFromElm(WebElement startElm,By by) {
+    List<WebElement> elms = startElm.findElements(by);
+    WebElement elm = null;
+    if (elms.size() != 0) {
+      elm = elms.get(0);
+    }
+    return new ElmCountPair(elm, elms.size());
+  }
+
 }

@@ -1,6 +1,7 @@
 package bandcamp_scraper_core.scraper.album;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 
 import org.openqa.selenium.NoSuchElementException;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import bandcamp_scraper_core.exceptions.scraping.ScrapingException;
 import bandcamp_scraper_core.pages.AlbumPage;
 import bandcamp_scraper_models.Album;
+import bandcamp_scraper_models.Track;
 
 public class AlbumScraperSingleThreaded implements AlbumScraper {
 
@@ -29,11 +31,14 @@ public class AlbumScraperSingleThreaded implements AlbumScraper {
       driver.get(url);
       AlbumPage albumPage = new AlbumPage(driver);
 
-      String albumTitle = albumPage.getAlbumName();
-      builder.albumTitle(albumTitle);
+      String albumTitle = albumPage.getAlbumTitle();
+      builder.title(albumTitle);
 
       Optional<Float> albumPrice = albumPage.getDigitalAlbumPrice();
-      albumPrice.ifPresent(price -> builder.digitalCost(price));
+      albumPrice.ifPresent(price -> builder.price(price));
+
+      List<Track> tracks = albumPage.getTracks();
+      builder.tracks(tracks);
 
       return builder.build();
 

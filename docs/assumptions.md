@@ -1,5 +1,7 @@
 ### Bandcamp Assumptions
 
+#### Pages
+
 Bandcamp artist pages have the following URL structure
 
 `https://teenagehalloween.bandcamp.com/`
@@ -22,6 +24,18 @@ page when there profile is hit.
 when no override is present.
 
 > It also seems that this page must exist.
+
+#### Sub Pages
+
+/track
+
+> can be a standalone release or part of an album
+>
+> track price and track lyrics are locked behind this page.
+
+/album
+
+> a listing of tracks and purchase options
 
 #### Known Redirects
 

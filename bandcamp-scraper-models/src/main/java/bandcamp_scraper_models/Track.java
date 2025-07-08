@@ -16,8 +16,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public final class Track extends ReleaseItem implements Release {
-  private String trackTitle;
+  private String title;
+  private int number;
   private int duration;
-  private int digitalCost;
 }
 

@@ -19,8 +19,8 @@ import lombok.ToString;
 @AllArgsConstructor
 public final class Album extends ReleaseItem implements Release {
 
-  private String albumTitle;
-  private float digitalCost;
+  private String title;
+  private float price;
   private List<Track> tracks;
   //private Art art (ArtLink/ArtBase64)
 
