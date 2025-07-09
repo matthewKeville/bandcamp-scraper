@@ -1,7 +1,7 @@
 ---
 name: Planned Task
 about: Use this template for planned tasks
-title: "[Planned Task] "
+title: "[Task] "
 labels: planned
 assignees: matthewKeville
 ---
