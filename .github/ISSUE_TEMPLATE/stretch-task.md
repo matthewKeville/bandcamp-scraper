@@ -1,4 +1,3 @@
-
 ---
 name: Stretch Task
 about: Use this template for Stretch tasks
