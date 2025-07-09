@@ -1,3 +1,5 @@
+package integration;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
@@ -10,7 +12,7 @@ import bandcamp_scraper_core.scraper.artist.ArtistScraperSingleThreaded;
 import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.Release;
 
-public class ArtistScraperIT {
+public class ArtistScraperSingleThreadedIT {
 
 private String scrapeArtistTestIntent(String artistName) {
   return "Scraped artist data should match expected data for " + artistName;

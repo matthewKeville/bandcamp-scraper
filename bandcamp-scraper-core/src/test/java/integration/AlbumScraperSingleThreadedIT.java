@@ -1,3 +1,5 @@
+package integration;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -9,7 +11,7 @@ import bandcamp_scraper_core.scraper.album.AlbumScraperSingleThreaded;
 import bandcamp_scraper_models.Album;
 import bandcamp_scraper_models.Track;
 
-public class AlbumScraperIT {
+public class AlbumScraperSingleThreadedIT {
 
 private String scrapeAlbumTestIntent(String albumName) {
   return "Scraped album data should match expected data for " + albumName;

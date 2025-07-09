@@ -10,8 +10,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
 import bandcamp_scraper_core.exceptions.scraping.ScrapingException;
 import bandcamp_scraper_core.pages.ArtistPage;
+import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.Release;
 
@@ -19,7 +21,11 @@ public class ArtistScraperSingleThreaded implements ArtistScraper {
 
   private Logger LOG = LoggerFactory.getLogger(ArtistScraperSingleThreaded.class);
 
-  public Artist scrapeArtist(String url) {
+  public Artist scrapeArtist(String url) throws InvalidResourceUrlException {
+
+    if (!UrlUtils.isArtistURL(url)) {
+      throw new InvalidResourceUrlException("URL " + url + " is not a valid artist url");
+    }
 
     WebDriver driver = new ChromeDriver();
     driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));

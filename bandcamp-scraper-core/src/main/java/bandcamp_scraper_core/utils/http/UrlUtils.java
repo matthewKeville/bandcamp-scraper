@@ -1,16 +1,48 @@
 package bandcamp_scraper_core.utils.http;
 
+import java.util.regex.Pattern;
+
+import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
+import bandcamp_scraper_models.Album;
+import bandcamp_scraper_models.Artist;
+import bandcamp_scraper_models.Track;
+
 public class UrlUtils {
 
-  public static String tryGetArtistBaseUrl(String url) {
-      // Regex to match scheme + subdomain.bandcamp.com
-      String pattern = "^https?://([a-zA-Z0-9_-]+\\.bandcamp\\.com)(/.*)?$";
+    private static final Pattern TRACK_URL = Pattern.compile("^https?://[a-zA-Z0-9_-]+\\.bandcamp\\.com/track/[^/?#]+/?$");
+    private static final Pattern ALBUM_URL = Pattern.compile("^https?://[a-zA-Z0-9_-]+\\.bandcamp\\.com/album/[^/?#]+/?$");
+    private static final Pattern ARTIST_URL = Pattern.compile("^https?://[a-zA-Z0-9_-]+\\.bandcamp\\.com(/(music)?)?/?$");
 
-      if (!url.matches(pattern)) {
-          throw new IllegalArgumentException("URL must contain a bandcamp.com subdomain");
+    public static String getArtistBaseUrl(String url) throws InvalidResourceUrlException {
+        if (url == null) throw new InvalidResourceUrlException("URL must contain a bandcamp.com subdomain");
+        String pattern = "^https?://([a-zA-Z0-9_-]+\\.bandcamp\\.com)(/.*)?$";
+        if (!url.matches(pattern)) {
+            throw new InvalidResourceUrlException("URL must contain a bandcamp.com subdomain");
+        }
+        return url.replaceAll(pattern, "https://$1");
+    }
+
+    public static boolean isArtistURL(String url) {
+      if (url == null) return false;
+        return ARTIST_URL.matcher(url).matches();
+    }
+
+    public static boolean isAlbumURL(String url) {
+      if (url == null) return false;
+        return ALBUM_URL.matcher(url).matches();
+    }
+
+    public static boolean isTrackURL(String url) {
+      if (url == null) return false;
+        return TRACK_URL.matcher(url).matches();
+    }
+
+    public static Class<?> resolveResourceModelType(String url) throws InvalidResourceUrlException {
+      if (url != null && !url.isEmpty()) {
+        if (isArtistURL(url)) return Artist.class;
+        if (isAlbumURL(url)) return Album.class;
+        if (isTrackURL(url)) return Track.class;
       }
-      // Extract scheme + subdomain.bandcamp.com (without trailing slash)
-      return url.replaceAll(pattern, "https://$1");
-  }
-
+      throw new InvalidResourceUrlException("Unable to determine Resource class for " + url);
+    }
 }

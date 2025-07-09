@@ -13,6 +13,7 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
 import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_core.utils.selenium.DriverUtils;
 import bandcamp_scraper_models.Release;
@@ -55,7 +56,7 @@ public class ArtistPage {
       WebElement elmMusicGrid = ecp.getElm();
       List<WebElement> elmsReleaseLink = elmMusicGrid.findElements(By.cssSelector("li a"));
 
-      String artistBaseUrl = UrlUtils.tryGetArtistBaseUrl(driver.getCurrentUrl());
+      String artistBaseUrl = UrlUtils.getArtistBaseUrl(driver.getCurrentUrl());
 
       Set<Release> releaseItems = elmsReleaseLink.stream()
         .map( elmA -> elmA.getDomAttribute("href"))
@@ -68,7 +69,7 @@ public class ArtistPage {
 
       return releaseItems;
 
-    } catch (NoSuchElementException ex) {
+    } catch (NoSuchElementException | InvalidResourceUrlException ex ) {
         return Collections.emptySet();
     }
 
