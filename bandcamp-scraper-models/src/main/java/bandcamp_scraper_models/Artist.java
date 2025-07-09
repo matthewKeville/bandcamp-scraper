@@ -1,27 +1,22 @@
 package bandcamp_scraper_models;
 
-import java.util.List;
 import java.util.Set;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
-@EqualsAndHashCode
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
-public class Artist {
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class Artist extends HydratableModel {
 
   private String name;
   private String location;
-  private Set<ReleaseItem> releases;
+  private Set<Release> releases;
 
 }

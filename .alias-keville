@@ -1,3 +1,8 @@
 
+alias album-check-all='mvn -pl bandcamp-scraper-core/ -Dit.test=AlbumScraperIT verify'
 alias album-sanity-check-1='mvn -pl bandcamp-scraper-core/ -Dit.test=AlbumScraperIT#getBurnTheEarthLeaveItBehind verify'
 alias album-sanity-check-2='mvn -pl bandcamp-scraper-core/ -Dit.test=AlbumScraperIT#getAllIDidThisSummerWasGoToRehab verify'
+
+alias artist-check-all='mvn -pl bandcamp-scraper-core/ -Dit.test=ArtistScraperIT verify'
+alias artist-sanity-check-1='mvn -pl bandcamp-scraper-core/ -Dit.test=ArtistScraperIT#getTeenageHalloween verify'
+

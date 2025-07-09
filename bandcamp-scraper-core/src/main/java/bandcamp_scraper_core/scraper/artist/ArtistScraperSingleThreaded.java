@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import bandcamp_scraper_core.exceptions.scraping.ScrapingException;
 import bandcamp_scraper_core.pages.ArtistPage;
 import bandcamp_scraper_models.Artist;
-import bandcamp_scraper_models.ReleaseItem;
+import bandcamp_scraper_models.Release;
 
 public class ArtistScraperSingleThreaded implements ArtistScraper {
 
@@ -36,7 +36,7 @@ public class ArtistScraperSingleThreaded implements ArtistScraper {
       builder.name(artistName);
 
       LOG.info("scraping releaseItems");
-      Set<ReleaseItem> releaseItems = artistPage.getReleasesItems();
+      Set<Release> releaseItems = artistPage.getReleasesItems();
       builder.releases(releaseItems);
 
       if (artistPage.hasSidebar()) {

@@ -13,9 +13,9 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_core.utils.selenium.DriverUtils;
-import bandcamp_scraper_models.ReleaseItem;
-import bandcamp_scraper_models.ReleaseLink;
+import bandcamp_scraper_models.Release;
 
 public class ArtistPage {
 
@@ -38,7 +38,7 @@ public class ArtistPage {
     return artistName;
   }
 
-  public Set<ReleaseItem> getReleasesItems() {
+  public Set<Release> getReleasesItems() {
 
     try {
 
@@ -55,10 +55,15 @@ public class ArtistPage {
       WebElement elmMusicGrid = ecp.getElm();
       List<WebElement> elmsReleaseLink = elmMusicGrid.findElements(By.cssSelector("li a"));
 
-      Set<ReleaseItem> releaseItems = elmsReleaseLink.stream()
+      String artistBaseUrl = UrlUtils.tryGetArtistBaseUrl(driver.getCurrentUrl());
+
+      Set<Release> releaseItems = elmsReleaseLink.stream()
         .map( elmA -> elmA.getDomAttribute("href"))
         .filter( href -> href != null )
-        .map( href -> new ReleaseLink(href))
+        .map(href -> artistBaseUrl + href)
+        .map(href -> Release.tryCreateFromHref(href))
+        .filter(opt -> opt.isPresent())
+        .map( opt -> opt.get())
         .collect(Collectors.toSet());
 
       return releaseItems;

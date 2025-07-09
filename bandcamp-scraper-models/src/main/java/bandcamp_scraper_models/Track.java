@@ -1,21 +1,17 @@
 package bandcamp_scraper_models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
-@EqualsAndHashCode
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
-public final class Track extends ReleaseItem implements Release {
+public class Track extends HydratableModel {
   private String title;
   private int number;
   private int duration;
