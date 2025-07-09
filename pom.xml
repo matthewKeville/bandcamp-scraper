@@ -12,7 +12,7 @@
     <module>shared-resources-testing</module>
     <module>bandcamp-scraper-models</module>
     <module>bandcamp-scraper-core</module>
-    <module>bandcamp-scraper-client</module>
+    <module>bandcamp-scraper-cli</module>
   </modules>
 
   <dependencyManagement>

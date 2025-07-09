@@ -13,8 +13,8 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>bandcamp-scraper-client</artifactId>
-  <name>bandcamp-scraper-client</name>
+  <artifactId>bandcamp-scraper-cli</artifactId>
+  <name>bandcamp-scraper-cli</name>
   <description>Spring Boot application to run the Bandcamp scraper</description>
   <packaging>jar</packaging>
 
@@ -40,8 +40,22 @@
       <version>3.5.3</version>
     </dependency>
 
+    <dependency>
+      <groupId>info.picocli</groupId>
+      <artifactId>picocli</artifactId>
+      <version>4.7.7</version>
+    </dependency>
+
   </dependencies>
 
-  <build></build>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>3.5.3</version>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
