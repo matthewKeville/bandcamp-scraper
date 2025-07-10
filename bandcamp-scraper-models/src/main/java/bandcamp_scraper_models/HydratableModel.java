@@ -1,5 +1,6 @@
 package bandcamp_scraper_models;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,7 +12,8 @@ import lombok.experimental.SuperBuilder;
 @ToString
 public abstract class HydratableModel {
 
-  private HydrationStatus status;
+  @Builder.Default
+  private HydrationStatus status = HydrationStatus.DRY;
   private String origin;
 
   public enum HydrationStatus {

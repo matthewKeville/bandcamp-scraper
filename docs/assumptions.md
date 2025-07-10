@@ -46,3 +46,14 @@ I commonly observe Artist pages redirecting to a recent release.
 > When we scrape an artist we target `https://$(artistName).bandcamp.com/music`
 the discography should present the sidebar, and we can scrape the relevant
 metadata from that if it is present.
+
+# General Notes
+
+It appears that album pages will display the metadata for lyrics
+in the Album page, despite it not being visible until you view
+the /track page for that Track.
+
+Thus, we can get more hydration from the Album Scraper impls without having
+to hop to a new page.
+
+

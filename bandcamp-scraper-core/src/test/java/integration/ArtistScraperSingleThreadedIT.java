@@ -11,6 +11,7 @@ import bandcamp_scraper_core.scraper.artist.ArtistScraper;
 import bandcamp_scraper_core.scraper.artist.ArtistScraperSingleThreaded;
 import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.Release;
+import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
 public class ArtistScraperSingleThreadedIT {
 
@@ -22,10 +23,14 @@ private String scrapeArtistTestIntent(String artistName) {
 void getTeenageHalloween() {
 
     //Arrange
-    String artistBaseUrl = "https://teenagehalloween.bandcamp.com";
+    final String artistBaseUrl = "https://teenagehalloween.bandcamp.com";
+    final String artistUrl = artistBaseUrl + "/music";
+
     Artist.ArtistBuilder builder = Artist.builder()
       .name("Teenage Halloween")
-      .location("Asbury Park, New Jersey");
+      .location("Asbury Park, New Jersey")
+      .status(HydrationStatus.HYDRATED)
+      .origin(artistUrl);
 
     Set<Release> releases = new HashSet<Release>();
     releases.add(Release.createFromHref(artistBaseUrl+"/album/till-you-return"));
@@ -33,13 +38,13 @@ void getTeenageHalloween() {
     releases.add(Release.createFromHref(artistBaseUrl+"/album/eternal-roast"));
     releases.add(Release.createFromHref(artistBaseUrl+"/album/teenage-halloween"));
     builder.releases(releases);
-      
+
 
     Artist expected = builder.build();
     ArtistScraper artistScraper = new ArtistScraperSingleThreaded();
 
     //Act
-    Artist actual = artistScraper.scrapeArtist(artistBaseUrl+"/music");
+    Artist actual = artistScraper.scrapeArtist(artistUrl);
 
     //Asset
     assertThat(expected)
@@ -53,10 +58,13 @@ void getTeenageHalloween() {
 void getSlimeGirls() {
 
     //Arrange
-    String artistBaseUrl = "https://slimegirls.bandcamp.com";
+    final String artistBaseUrl = "https://slimegirls.bandcamp.com";
+    final String artistUrl = artistBaseUrl+"/music";
     Artist.ArtistBuilder builder = Artist.builder()
       .name("Slime Girls")
-      .location("Los Angeles, California");
+      .location("Los Angeles, California")
+      .status(HydrationStatus.HYDRATED)
+      .origin(artistUrl);
 
     Set<Release> releases = new HashSet<>();
     releases.add(Release.createFromHref(artistBaseUrl + "/album/as-if-youre-never-hurt"));
@@ -75,7 +83,7 @@ void getSlimeGirls() {
     ArtistScraper artistScraper = new ArtistScraperSingleThreaded();
 
     //Act
-    Artist actual = artistScraper.scrapeArtist(artistBaseUrl+"/music");
+    Artist actual = artistScraper.scrapeArtist(artistUrl);
 
     //Asset
     assertThat(expected)
@@ -85,14 +93,18 @@ void getSlimeGirls() {
 
 }
 
+
 @Test
 void getElephantJake() {
 
     //Arrange
-    String artistBaseUrl = "https://elephantjake.bandcamp.com";
+    final String artistBaseUrl = "https://elephantjake.bandcamp.com";
+    final String artistUrl = artistBaseUrl+"/music";
     Artist.ArtistBuilder builder = Artist.builder()
       .name("Elephant Jake")
-      .location("Philadelphia, Pennsylvania");
+      .location("Philadelphia, Pennsylvania")
+      .status(HydrationStatus.HYDRATED)
+      .origin(artistUrl);
 
     Set<Release> releases = new HashSet<>();
     releases.add(Release.createFromHref(artistBaseUrl + "/album/goodness-to-honest"));
@@ -118,7 +130,7 @@ void getElephantJake() {
     ArtistScraper artistScraper = new ArtistScraperSingleThreaded();
 
     //Act
-    Artist actual = artistScraper.scrapeArtist(artistBaseUrl+"/music");
+    Artist actual = artistScraper.scrapeArtist(artistUrl);
 
     //Asset
     assertThat(expected)

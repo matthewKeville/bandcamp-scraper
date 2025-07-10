@@ -1,10 +1,7 @@
 package bandcamp_scraper_core.pages;
 
 
-import java.text.ParseException;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,14 +12,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.By.ByLinkText;
-import org.openqa.selenium.support.locators.RelativeLocator;
 import org.openqa.selenium.support.pagefactory.ByChained;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
+import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_core.utils.selenium.DriverUtils;
 import bandcamp_scraper_models.Track;
+import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
 public class AlbumPage {
 
@@ -80,18 +78,54 @@ public class AlbumPage {
 
       Track.TrackBuilder builder = Track.builder();
 
-      if ( 
-        extractTrackNumber(elm, builder) &&
-        extractTrackTitle(elm, builder) &&
-        extractTrackTime(elm, builder) 
-      ) {
+      extractTrackLink(elm, builder);
+
+      boolean gotTrackNumber = extractTrackNumber(elm, builder);
+      boolean gotTrackTitle = extractTrackTitle(elm, builder);
+      boolean gotTrackTime = extractTrackTime(elm, builder);
+      if (gotTrackNumber || gotTrackTime || gotTrackTitle) {
+        builder.status(HydrationStatus.PARTIAL);
+      }
 
       tracks.add(builder.build());
 
-      }
-
     }
     return tracks;
+  }
+
+  /** 
+   * @return : successful extraction
+   */
+  private boolean extractTrackLink(WebElement elm,Track.TrackBuilder builder) {
+
+    //<a href=${link.text}>...</a>
+    By trackLinkLocator = By.cssSelector("a[href]");
+
+    var ecpTrackLink = DriverUtils.findElmCountPairFromElm(elm, trackLinkLocator);
+    if (ecpTrackLink.getCount() == 0 ) {
+      return false;
+    }
+    if (ecpTrackLink.getCount() > 1 ) {
+      LOG.warn("unexpected numer of elements for " + trackLinkLocator );
+    }
+    String trackLinkHref = ecpTrackLink.getElm().getAttribute("href");
+    if (trackLinkHref == null || trackLinkHref.isEmpty()) {
+      return false;
+    }
+
+    try {
+      if (!UrlUtils.isTrackURL(trackLinkHref)) {
+        LOG.warn("Track href found, but failed to validate");
+        LOG.warn("Track href : " + trackLinkHref);
+        return false;
+      }
+      builder.origin(trackLinkHref);
+    } catch (InvalidResourceUrlException ex) {
+      return false;
+    }
+
+    return true;
+
   }
 
   /** 
@@ -104,7 +138,7 @@ public class AlbumPage {
 
     var ecpTrackNumberDiv = DriverUtils.findElmCountPairFromElm(elm, trackNumberDivLocator);
     if (ecpTrackNumberDiv.getCount() == 0 ) {
-      LOG.warn("skipping track");
+      LOG.warn("can't find " + trackNumberDivLocator);
       return false;
     }
     if (ecpTrackNumberDiv.getCount() > 1 ) {
@@ -122,7 +156,7 @@ public class AlbumPage {
       builder.number(trackNumber);
       return true;
     } catch (NumberFormatException ex) {
-      LOG.warn("skipping track : number parse exception" + ex.getMessage());
+      LOG.warn("number parse exception" + ex.getMessage());
       return false;
     }
 
@@ -138,7 +172,7 @@ public class AlbumPage {
 
     var ecpTrackTitleSpan = DriverUtils.findElmCountPairFromElm(elm, trackTitleSpanLocator);
     if (ecpTrackTitleSpan.getCount() == 0 ) {
-      LOG.warn("skipping track");
+      LOG.warn("can't find " + trackTitleSpanLocator);
       return false;
     }
     if (ecpTrackTitleSpan.getCount() > 1 ) {
@@ -146,6 +180,7 @@ public class AlbumPage {
     }
     String trackTitleText = ecpTrackTitleSpan.getElm().getText();
     if (trackTitleText == null || trackTitleText.isEmpty()) {
+      LOG.warn("couldn't get track title text");
       return false;
     }
     builder.title(trackTitleText);
@@ -177,7 +212,7 @@ public class AlbumPage {
       Pattern pattern = Pattern.compile("(\\d+):(\\d+)");
       Matcher matcher = pattern.matcher(timeText);
       if (!matcher.find()) {
-        LOG.warn("skipping track : couldn't locate time match in : " + timeText);
+        LOG.warn("couldn't locate time match in : " + timeText);
         return false;
       }
 
@@ -189,7 +224,7 @@ public class AlbumPage {
       return true;
 
     } catch (NumberFormatException ex) {
-      LOG.warn("skipping track : time parse exception " + ex.getMessage());
+      LOG.warn("time parse exception " + ex.getMessage());
       return false;
     }
 

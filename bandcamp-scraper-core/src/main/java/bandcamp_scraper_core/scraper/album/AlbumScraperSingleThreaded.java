@@ -16,6 +16,7 @@ import bandcamp_scraper_core.pages.AlbumPage;
 import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_models.Album;
 import bandcamp_scraper_models.Track;
+import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
 public class AlbumScraperSingleThreaded implements AlbumScraper {
 
@@ -31,6 +32,7 @@ public class AlbumScraperSingleThreaded implements AlbumScraper {
     driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
     Album.AlbumBuilder builder = Album.builder();
+    builder.origin(url);
 
     try {
 
@@ -45,6 +47,7 @@ public class AlbumScraperSingleThreaded implements AlbumScraper {
 
       List<Track> tracks = albumPage.getTracks();
       builder.tracks(tracks);
+      builder.status(HydrationStatus.HYDRATED);
 
       return builder.build();
 

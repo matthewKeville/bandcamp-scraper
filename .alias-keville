@@ -1,8 +1,5 @@
+alias it-artist-all='mvn -pl bandcamp-scraper-core/ -Dit.test=integration.ArtistScraperSingleThreadedIT verify'
+alias it-artist-teenage-halloween='mvn -pl bandcamp-scraper-core/ -Dit.test=integration.ArtistScraperSingleThreadedIT#getTeenageHalloween verify'
 
-alias album-check-all='mvn -pl bandcamp-scraper-core/ -Dit.test=AlbumScraperIT verify'
-alias album-sanity-check-1='mvn -pl bandcamp-scraper-core/ -Dit.test=AlbumScraperIT#getBurnTheEarthLeaveItBehind verify'
-alias album-sanity-check-2='mvn -pl bandcamp-scraper-core/ -Dit.test=AlbumScraperIT#getAllIDidThisSummerWasGoToRehab verify'
-
-alias artist-check-all='mvn -pl bandcamp-scraper-core/ -Dit.test=ArtistScraperIT verify'
-alias artist-sanity-check-1='mvn -pl bandcamp-scraper-core/ -Dit.test=ArtistScraperIT#getTeenageHalloween verify'
-
+alias it-album-all='mvn -pl bandcamp-scraper-core/ -Dit.test=integration.AlbumScraperSingleThreadedIT verify'
+alias it-album-burn='mvn -pl bandcamp-scraper-core/ -Dit.test=integration.AlbumScraperSingleThreadedIT#getBurnTheEarthLeaveItBehind verify'

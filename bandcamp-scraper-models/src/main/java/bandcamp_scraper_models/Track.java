@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-@ToString
+@ToString(callSuper = true)
 public class Track extends HydratableModel {
   private String title;
   private int number;

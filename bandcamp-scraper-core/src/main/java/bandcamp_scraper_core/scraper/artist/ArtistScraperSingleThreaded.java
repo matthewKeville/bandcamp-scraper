@@ -16,6 +16,7 @@ import bandcamp_scraper_core.pages.ArtistPage;
 import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.Release;
+import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
 public class ArtistScraperSingleThreaded implements ArtistScraper {
 
@@ -31,6 +32,7 @@ public class ArtistScraperSingleThreaded implements ArtistScraper {
     driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
     Artist.ArtistBuilder builder = Artist.builder();
+    builder.origin(url);
 
     try {
 
@@ -51,6 +53,7 @@ public class ArtistScraperSingleThreaded implements ArtistScraper {
         optLocation.ifPresent( loc -> builder.location(loc));
       }
 
+      builder.status(HydrationStatus.HYDRATED);
       return builder.build();
 
     } catch (NoSuchElementException ex) {
