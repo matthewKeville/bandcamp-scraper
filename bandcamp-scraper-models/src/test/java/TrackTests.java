@@ -1,23 +1,21 @@
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.stream.Stream;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import bandcamp_scraper_models.Track;
 import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
-public class TrackTests {
+public class TrackTests extends AbstractSerializationTest<Track>  {
 
-  public static final Logger LOG = LoggerFactory.getLogger(TrackTests.class);
+  @Override
+  protected Logger provideLogger() {
+    return LoggerFactory.getLogger(Track.class);
+  }
 
-  static Stream<Arguments> trackProvider() {
+  @Override
+  protected Stream<Arguments> provideTestCases() {
     return Stream.of(
         // ringtone
         Arguments.of(
@@ -47,23 +45,5 @@ public class TrackTests {
         )
     );
   }
-
-  @ParameterizedTest
-  @MethodSource("trackProvider")
-  void trackSerializesCorrectly(Track track, String expectedJson) throws Exception {
-
-      //Arrange
-      ObjectMapper mapper = new ObjectMapper();
-
-      //Act
-      String actualJson = mapper.writeValueAsString(track);
-
-      //Assert
-      assertThat(actualJson)
-        .as("JSON matches expectation")
-        .isEqualTo(expectedJson);
-
-  }
-
 
 }
