@@ -1,15 +1,15 @@
 package bandcamp_scraper.commands;
 
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 @Command(
     name = "",
     mixinStandardHelpOptions = true,
-    description = "A CLI for scraping resources from bandcamp.com",
-    subcommands = {ScrapeCommand.class}
+    description = "A CLI for scraping resources from bandcamp.com"
 )
 public class RootCommand implements Runnable {
 

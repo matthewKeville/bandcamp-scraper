@@ -1,20 +1,28 @@
 package bandcamp_scraper;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 
-import bandcamp_scraper.commands.RootCommand;
 import picocli.CommandLine;
-import picocli.CommandLine.Command;
 
 @SpringBootApplication
-public class BandcampScraperCLI {
+public class BandcampScraperCLI implements CommandLineRunner {
+
+  private CommandLine commandLine;
+
+  public BandcampScraperCLI(@Autowired CommandLine commandLine) {
+    this.commandLine = commandLine;
+  }
 
   public static void main(String[] args) {
-    ApplicationContext ctx = SpringApplication.run(BandcampScraperCLI.class, args);
-    int exitCode = new CommandLine(ctx.getBean(RootCommand.class)).execute(args);
-    System.exit(exitCode);
+    SpringApplication.run(BandcampScraperCLI.class, args);
   }
+
+  public void run(String... args) {
+    commandLine.execute(args);
+  }
+
 
 }

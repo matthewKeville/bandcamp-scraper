@@ -13,6 +13,10 @@ public class UrlUtils {
     private static final Pattern ALBUM_URL = Pattern.compile("^https?://[a-zA-Z0-9_-]+\\.bandcamp\\.com/album/[^/?#]+/?$");
     private static final Pattern ARTIST_URL = Pattern.compile("^https?://[a-zA-Z0-9_-]+\\.bandcamp\\.com(/(music)?)?/?$");
 
+    public static final String TRACK_SLUG_URL = "https://<artist>.bandcamp.com/track/<title>";
+    public static final String ALBUM_SLUG_URL = "https://<artist>.bandcamp.com/album/<title>";
+    public static final String ARTIST_SLUG_URL = "https://<artist>.bandcamp.com/music>";
+
     public static String getArtistBaseUrl(String url) throws InvalidResourceUrlException {
         if (url == null) throw new InvalidResourceUrlException("URL must contain a bandcamp.com subdomain");
         String pattern = "^https?://([a-zA-Z0-9_-]+\\.bandcamp\\.com)(/.*)?$";
