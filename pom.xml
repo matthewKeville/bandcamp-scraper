@@ -15,51 +15,16 @@
     <module>bandcamp-scraper-cli</module>
   </modules>
 
+  <properties>
+    <java.version>21</java.version>
+    <skipITs>false</skipITs>
+    <lombok.version>1.18.38</lombok.version>
+    <slfj.version>2.0.17</slfj.version>
+    <jackson.version>2.17.1</jackson.version>
+  </properties>
+
   <dependencyManagement>
     <dependencies>
-
-      <dependency> 
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>2.0.17</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter</artifactId>
-        <version>5.9.1</version>
-        <scope>test</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-params</artifactId>
-        <version>5.9.1</version>
-        <scope>test</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>org.assertj</groupId>
-        <artifactId>assertj-core</artifactId>
-        <version>3.27.3</version>
-        <scope>test</scope>
-      </dependency>
-
-      <dependency>
-          <groupId>ch.qos.logback</groupId>
-          <artifactId>logback-classic</artifactId>
-          <version>1.5.18</version>
-          <scope>compile</scope>
-      </dependency>
-
-      <!-- internal -->
-
-      <dependency>
-        <groupId>com.keville</groupId>
-        <artifactId>shared-resources-testing</artifactId>
-        <version>${project.version}</version>
-        <scope>test</scope>
-      </dependency>
 
       <dependency>
         <groupId>com.keville</groupId>
@@ -73,13 +38,66 @@
         <version>${project.version}</version>
       </dependency>
 
+      <dependency> 
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slfj.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jdk8</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>5.9.1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-params</artifactId>
+        <version>5.9.1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>3.27.3</version>
+      </dependency>
+
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.5.18</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
+      </dependency>
+
+      <!-- internal -->
+
+      <dependency>
+        <groupId>com.keville</groupId>
+        <artifactId>shared-resources-testing</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+
     </dependencies>
   </dependencyManagement>
 
-  <properties>
-    <java.version>21</java.version>
-    <skipITs>false</skipITs>
-  </properties>
 
   <build>
     <plugins>

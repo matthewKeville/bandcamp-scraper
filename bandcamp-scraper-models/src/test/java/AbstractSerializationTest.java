@@ -1,5 +1,7 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import bandcamp_scraper_models.BandcampObjectMapper;
+
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Assertions;
@@ -12,7 +14,7 @@ import org.slf4j.Logger;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class AbstractSerializationTest<T> {
 
-  private static final ObjectMapper mapper = new ObjectMapper();
+  private static final ObjectMapper mapper = BandcampObjectMapper.newInstance();
   protected Logger LOG = provideLogger();
 
   protected abstract Logger provideLogger();

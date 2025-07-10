@@ -20,44 +20,55 @@
 
   <dependencies>
 
-    <!-- inherit -->
+    <!-- inherit : provided -->
 
-    <dependency>
-      <groupId>com.keville</groupId>
-      <artifactId>bandcamp-scraper-models</artifactId>
+    <dependency> 
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
     </dependency>
 
-    <dependency>
-      <groupId>com.keville</groupId>
-      <artifactId>shared-resources-testing</artifactId>
-    </dependency>
+    <!-- inherit : test  -->
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-    </dependency>
-
-    <dependency> 
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
+        <scope>test</scope>
     </dependency>
 
-    <!-- unique -->
+    <dependency>
+      <groupId>com.keville</groupId>
+      <artifactId>shared-resources-testing</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- inherit : compile  -->
+
+    <dependency>
+      <groupId>com.keville</groupId>
+      <artifactId>bandcamp-scraper-models</artifactId>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- unique : compile -->
 
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
       <version>4.33.0</version>
+      <scope>compile</scope>
     </dependency>
 
 

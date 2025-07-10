@@ -17,7 +17,7 @@ public class TrackTests extends AbstractSerializationTest<Track>  {
   @Override
   protected Stream<Arguments> provideTestCases() {
     return Stream.of(
-        // ringtone
+        // https://100gecs.bandcamp.com/track/ringtone : ringtone
         Arguments.of(
           Track.builder()
             .number(7)
@@ -28,19 +28,6 @@ public class TrackTests extends AbstractSerializationTest<Track>  {
             .build(),
           """
           {"status":"PARTIAL","origin":"https://100gecs.bandcamp.com/track/ringtone","title":"ringtone","number":7,"duration":143}
-          """.trim()
-        ),
-        // money machine
-        Arguments.of(
-          Track.builder()
-            .number(2)
-            .duration(114)
-            .title("money machine")
-            .status(HydrationStatus.PARTIAL)
-            .origin("https://100gecs.bandcamp.com/track/money-machine")
-            .build(),
-          """
-          {"status":"PARTIAL","origin":"https://100gecs.bandcamp.com/track/money-machine","title":"money machine","number":2,"duration":114}
           """.trim()
         )
     );

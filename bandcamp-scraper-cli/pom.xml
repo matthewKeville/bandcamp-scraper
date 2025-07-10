@@ -20,30 +20,34 @@
 
   <dependencies>
 
-    <!-- inherit -->
-
-    <dependency>
-      <groupId>com.keville</groupId>
-      <artifactId>bandcamp-scraper-core</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.keville</groupId>
-      <artifactId>bandcamp-scraper-models</artifactId>
-    </dependency>
-
     <!-- unique -->
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
       <version>3.5.3</version>
+      <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>info.picocli</groupId>
       <artifactId>picocli</artifactId>
       <version>4.7.7</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- inherit : compile -->
+
+    <dependency>
+      <groupId>com.keville</groupId>
+      <artifactId>bandcamp-scraper-core</artifactId>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.keville</groupId>
+      <artifactId>bandcamp-scraper-models</artifactId>
+      <scope>compile</scope>
     </dependency>
 
   </dependencies>
