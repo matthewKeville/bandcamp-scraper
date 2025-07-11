@@ -57,6 +57,8 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.event.inputs.release_tag }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload release artifact
       uses: actions/upload-release-asset@v1
@@ -65,4 +67,6 @@ jobs:
         asset_path: bandcamp-scraper-cli/target/bandcamp-scraper-cli-${{ github.event.inputs.release_tag }}.zip
         asset_name: bandcamp-scraper-cli-${{ github.event.inputs.release_tag }}.zip
         asset_content_type: application/zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
