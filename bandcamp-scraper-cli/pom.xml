@@ -127,7 +127,8 @@
           <descriptors>
             <descriptor>src/assembly/release.zip.xml</descriptor>
           </descriptors>
-          <finalName>${project.artifactId}-${project.version}-release</finalName>
+          <finalName>${project.artifactId}-${project.version}</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
         </configuration>
         <executions>
           <execution>
