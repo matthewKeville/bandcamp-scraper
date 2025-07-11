@@ -6,6 +6,10 @@ import picocli.CommandLine.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import bandcamp_scraper.logging.ConsoleAwareLogger;
 import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
 import bandcamp_scraper_core.exceptions.scraping.ScrapingException;
 import bandcamp_scraper_core.scraper.album.AlbumScraper;
@@ -28,12 +32,16 @@ public class ScrapeCommand implements Runnable {
     private final String issueTrackerUrl = "https://github.com/matthewKeville/bandcamp-scraper/issues";
     private ArtistScraper artistScraper;
     private AlbumScraper albumScraper;
+    private ObjectMapper mapper;
+    public static ConsoleAwareLogger LOG = ConsoleAwareLogger.getLogger(ScrapeCommand.class);
 
     public ScrapeCommand(@Autowired ArtistScraper artistScraper,
-        @Autowired AlbumScraper albumScraper
+        @Autowired AlbumScraper albumScraper,
+        @Autowired ObjectMapper objectMapper
         ) {
         this.artistScraper = artistScraper;
         this.albumScraper = albumScraper;
+        this.mapper = objectMapper;
     }
 
 
@@ -45,24 +53,31 @@ public class ScrapeCommand implements Runnable {
       try {
         var clazz = UrlUtils.resolveResourceModelType(url);
         if (clazz == Artist.class) {
-          System.out.print(artistScraper.scrapeArtist(url).toString());
+          Artist artist = artistScraper.scrapeArtist(url);
+          String json = mapper.writeValueAsString(artist);
+          LOG.printOut(json);
         } else if (clazz == Album.class) {
-          System.out.print(albumScraper.scrapeAlbum(url).toString());
+          Album album = albumScraper.scrapeAlbum(url);
+          String json = mapper.writeValueAsString(album);
+          LOG.printOut(json);
         } else if (clazz == Track.class) {
-          System.err.println("Track Scraping Not Implemented");
+          LOG.printErr("Track Scraping Not Implemented");
         } else {
-          System.err.println("Unsupported Resource : " + clazz.getName());
+          LOG.printErr("Unsupported Resource : " + clazz.getName());
         }
       } catch (InvalidResourceUrlException ex) {
-          System.err.println(String.format("Invalid URL : %s",url));
-          System.err.println("- - -");
-          System.err.println("Supported Resource URLS");
-          System.err.println("Artist : " + UrlUtils.ARTIST_SLUG_URL);
-          System.err.println("Album : " + UrlUtils.ALBUM_SLUG_URL);
-          System.err.println("Track : " + UrlUtils.TRACK_SLUG_URL);
-      }catch (ScrapingException ex) {
-          System.err.println(String.format("Encountered an internal error fetching the resource",url));
-          System.err.println(String.format("Please create an issue ticket @ ",issueTrackerUrl));
+          LOG.printErr(String.format("Invalid URL : %s",url));
+          LOG.printErr("- - -");
+          LOG.printErr("Supported Resource URLS");
+          LOG.printErr("Artist : " + UrlUtils.ARTIST_SLUG_URL);
+          LOG.printErr("Album : " + UrlUtils.ALBUM_SLUG_URL);
+          LOG.printErr("Track : " + UrlUtils.TRACK_SLUG_URL);
+      } catch (ScrapingException ex) {
+          LOG.printErr(String.format("Encountered an internal error fetching the resource",url));
+          LOG.printErr(String.format("Please create an issue ticket @ ",issueTrackerUrl));
+      } catch (JsonProcessingException ex) {
+          LOG.printErr(String.format("Encountered an internal error serializing the resource",url));
+          LOG.printErr(String.format("Please create an issue ticket @ ",issueTrackerUrl));
       }
 
     }

@@ -1,0 +1,13 @@
+logging:
+  file:
+    name: logs/bandcamp-cli.log
+  level:
+    root: ERROR
+    org.springframework: ERROR
+    org.springframework.boot: ERROR
+    bandcamp_scraper: INFO
+    bandcamp_scraper.BandcampScraperCLI: WARN
+
+spring:
+  main:
+    banner-mode: "off"
