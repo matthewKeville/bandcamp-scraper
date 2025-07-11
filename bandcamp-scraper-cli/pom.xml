@@ -53,6 +53,7 @@
   </dependencies>
 
   <build>
+
     <plugins>
 
       <plugin>
@@ -79,6 +80,62 @@
                 </transformer>
               </transformers>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.3.0</version>
+        <executions>
+          <execution>
+            <id>copy-scripts</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/scripts</outputDirectory>
+              <resources>
+
+                <resource>
+                  <directory>scripts</directory>
+                  <includes>
+                    <include>launch.sh</include>
+                  </includes>
+                  <filtering>true</filtering>
+                </resource>
+
+                <resource>
+                  <directory>scripts</directory>
+                  <includes>
+                    <include>launch.bat</include>
+                  </includes>
+                  <filtering>true</filtering>
+                </resource>
+
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+        </plugin>
+
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.6.0</version>
+        <configuration>
+          <descriptors>
+            <descriptor>src/assembly/release.zip.xml</descriptor>
+          </descriptors>
+          <finalName>${project.artifactId}-${project.version}-release</finalName>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
