@@ -49,8 +49,8 @@ jobs:
 
     - name: Rename release artifact
       run: |
-        mv target/bandcamp-scraper-cli-0.0.1-SNAPSHOT.zip \
-           target/bandcamp-scraper-cli-${{ github.event.inputs.release_tag }}.zip
+        mv bandcamp-scraper-cli/target/bandcamp-scraper-cli-0.0.1-SNAPSHOT.zip \
+           bandcamp-scraper-cli/target/bandcamp-scraper-cli-${{ github.event.inputs.release_tag }}.zip
 
     - name: Create GitHub release
       id: create_release
@@ -62,7 +62,7 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: target/bandcamp-scraper-cli-${{ github.event.inputs.release_tag }}.zip
+        asset_path: bandcamp-scraper-cli/target/bandcamp-scraper-cli-${{ github.event.inputs.release_tag }}.zip
         asset_name: bandcamp-scraper-cli-${{ github.event.inputs.release_tag }}.zip
         asset_content_type: application/zip
 
