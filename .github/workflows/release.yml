@@ -28,11 +28,14 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y google-chrome-stable
 
-    - name: Run tests
-      run: mvn clean verify
+    - name: Run unit tests
+      run: mvn test
+
+    - name: Run integration tests
+      run: mvn verify -DskipUTs
 
     - name: Build package
-      run: mvn package
+      run: mvn package -DskipITs -DskipUTs
 
     - name: Create GitHub release
       id: create_release

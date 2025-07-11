@@ -25,4 +25,4 @@ jobs:
           sudo apt-get install -y google-chrome-stable
 
       - name: Run Maven integration tests
-        run: mvn verify -DskipTests
+        run: mvn verify -DskipUTs
