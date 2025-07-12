@@ -244,6 +244,11 @@ launch.sh scrape -u=https://slimegirls.bandcamp.com/album/vacation-wasteland-ep
 - **`bandcamp-scraper-models`** – Java library containing domain models that support serialization via Jackson.
 - **`bandcamp-scraper-core`** – Java library containing scraping logic and utilities.
 - **`bandcamp-scraper-cli`** – CLI wrapper for executing scrapes from the command line and dumping them into JSON.
+---
+
+## 📐 Design & Architecture
+
+Explore the [v1.0.0 Design Documentation](docs/design.md) to understand the intended architecture and vision of the core library.
 
 ---
 
