@@ -44,13 +44,25 @@ jobs:
       if: ${{ !github.event.inputs.skip_integration_tests }}
       run: mvn verify -DskipUTs
 
-    - name: Build package
+    - name: Build Projects
       run: mvn package -DskipITs -DskipUTs
 
-    - name: Rename release artifact
+    - name: Build Flattened POM for core
+      run: mvn -f bandcamp-scraper-core flatten:flatten -DskipITs
+
+    - name: Rename CLI release artifact
       run: |
         mv bandcamp-scraper-cli/target/bandcamp-scraper-cli-0.0.1-SNAPSHOT.zip \
            bandcamp-scraper-cli/target/bandcamp-scraper-cli-${{ github.event.inputs.release_tag }}.zip
+
+    - name: Rename core release artifacts
+      run: |
+        mv bandcamp-scraper-core/target/bandcamp-scraper-core-0.0.1-SNAPSHOT.jar \
+           bandcamp-scraper-core/target/bandcamp-scraper-core-${{ github.event.inputs.release_tag }}.jar
+        mv bandcamp-scraper-core/target/bandcamp-scraper-core-0.0.1-SNAPSHOT-sources.jar \
+           bandcamp-scraper-core/target/bandcamp-scraper-core-${{ github.event.inputs.release_tag }}-sources.jar
+        mv bandcamp-scraper-core/target/.flattened-pom.xml \
+           bandcamp-scraper-core/target/bandcamp-scraper-core-${{ github.event.inputs.release_tag }}.pom
 
     - name: Create GitHub release
       id: create_release
@@ -60,7 +72,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Upload release artifact
+    - name: Upload CLI release artifact
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -70,3 +82,32 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Upload core release JAR artifact
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: bandcamp-scraper-core/target/bandcamp-scraper-core-${{ github.event.inputs.release_tag }}.jar
+        asset_name: bandcamp-scraper-core-${{ github.event.inputs.release_tag }}.jar
+        asset_content_type: application/java-archive
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload core release source JAR artifact
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: bandcamp-scraper-core/target/bandcamp-scraper-core-${{ github.event.inputs.release_tag }}-sources.jar
+        asset_name: bandcamp-scraper-core-${{ github.event.inputs.release_tag }}-sources.jar
+        asset_content_type: application/java-archive
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload core release POM artifact
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: bandcamp-scraper-core/target/bandcamp-scraper-core-${{ github.event.inputs.release_tag }}.pom
+        asset_name: bandcamp-scraper-core-${{ github.event.inputs.release_tag }}.pom
+        asset_content_type: application/xml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
