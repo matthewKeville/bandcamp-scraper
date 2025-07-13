@@ -14,4 +14,4 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class RootModel extends HydratableModel {}
+public abstract class RootModel extends HydratableModel implements Model {}
