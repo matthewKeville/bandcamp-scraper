@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Artist extends HydratableModel {
+public class Artist extends RootModel {
 
   private String name;
   private String location;

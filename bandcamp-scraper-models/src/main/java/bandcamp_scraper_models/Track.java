@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Track extends HydratableModel {
+public class Track extends RootModel {
   private String title;
   private int number;
   private int duration;
