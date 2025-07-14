@@ -10,14 +10,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import bandcamp_scraper.logging.ConsoleAwareLogger;
-import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
-import bandcamp_scraper_core.exceptions.scraping.ScrapingException;
-import bandcamp_scraper_core.scraper.album.AlbumScraper;
-import bandcamp_scraper_core.scraper.artist.ArtistScraper;
+import bandcamp_scraper_core.exceptions.fetching.FetchingException;
+import bandcamp_scraper_core.fetcher.FetchingContext;
+import bandcamp_scraper_core.fetcher.RootModelFetcher;
 import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_models.Album;
 import bandcamp_scraper_models.Artist;
-import bandcamp_scraper_models.Track;
+import bandcamp_scraper_core.selenium.DriverContext;
 
 @Component
 @Command(
@@ -30,20 +29,22 @@ public class ScrapeCommand implements Runnable {
 
     // TODO : Slot into AppSettings construct through application.yml
     private final String issueTrackerUrl = "https://github.com/matthewKeville/bandcamp-scraper/issues";
-    private ArtistScraper artistScraper;
-    private AlbumScraper albumScraper;
+    private DriverContext driverContext = new DriverContext();
+    private RootModelFetcher<Artist> artistFetcher;
+    private FetchingContext<Artist> artistFetcherContext = FetchingContext.dummy();
+    private RootModelFetcher<Album> albumFetcher;
+    private FetchingContext<Album> albumFetchingContext = FetchingContext.dummy();
     private ObjectMapper mapper;
     public static ConsoleAwareLogger LOG = ConsoleAwareLogger.getLogger(ScrapeCommand.class);
 
-    public ScrapeCommand(@Autowired ArtistScraper artistScraper,
-        @Autowired AlbumScraper albumScraper,
+    public ScrapeCommand(@Autowired RootModelFetcher<Artist> artistFetcher,
+        @Autowired  RootModelFetcher<Album> albumFetcher,
         @Autowired ObjectMapper objectMapper
         ) {
-        this.artistScraper = artistScraper;
-        this.albumScraper = albumScraper;
+        this.artistFetcher = artistFetcher;
+        this.albumFetcher = albumFetcher;
         this.mapper = objectMapper;
     }
-
 
     @Option(names = {"-u", "--url"}, description = "URL of resource to scrape", required = true)
     private String url;
@@ -51,28 +52,26 @@ public class ScrapeCommand implements Runnable {
     @Override
     public void run() {
       try {
-        var clazz = UrlUtils.resolveResourceModelType(url);
-        if (clazz == Artist.class) {
-          Artist artist = artistScraper.scrapeArtist(url);
+        if ( UrlUtils.isArtistURL(url) ) {
+          Artist artist = artistFetcher.fetchModel(artistFetcherContext,driverContext,url);
           String json = mapper.writeValueAsString(artist);
           LOG.printOut(json);
-        } else if (clazz == Album.class) {
-          Album album = albumScraper.scrapeAlbum(url);
+        } else if ( UrlUtils.isAlbumURL(url)) {
+          Album album = albumFetcher.fetchModel(albumFetchingContext,driverContext,url);
           String json = mapper.writeValueAsString(album);
           LOG.printOut(json);
-        } else if (clazz == Track.class) {
+        } else if ( UrlUtils.isTrackURL(url)) {
           LOG.printErr("Track Scraping Not Implemented");
         } else {
-          LOG.printErr("Unsupported Resource : " + clazz.getName());
-        }
-      } catch (InvalidResourceUrlException ex) {
           LOG.printErr(String.format("Invalid URL : %s",url));
           LOG.printErr("- - -");
           LOG.printErr("Supported Resource URLS");
           LOG.printErr("Artist : " + UrlUtils.ARTIST_SLUG_URL);
           LOG.printErr("Album : " + UrlUtils.ALBUM_SLUG_URL);
           LOG.printErr("Track : " + UrlUtils.TRACK_SLUG_URL);
-      } catch (ScrapingException ex) {
+        }
+      } 
+      catch (FetchingException ex) {
           LOG.printErr(String.format("Encountered an internal error fetching the resource",url));
           LOG.printErr(String.format("Please create an issue ticket @ ",issueTrackerUrl));
       } catch (JsonProcessingException ex) {
