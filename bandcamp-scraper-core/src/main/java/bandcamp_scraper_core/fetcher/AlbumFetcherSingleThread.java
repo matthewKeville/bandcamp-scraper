@@ -1,4 +1,4 @@
-package bandcamp_scraper_core.scraper.album;
+package bandcamp_scraper_core.fetcher;
 
 import java.time.Duration;
 import java.util.List;
@@ -10,22 +10,31 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bandcamp_scraper_core.exceptions.fetching.FetchingException;
 import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
-import bandcamp_scraper_core.exceptions.scraping.ScrapingException;
 import bandcamp_scraper_core.pages.AlbumPage;
+import bandcamp_scraper_core.selenium.DriverContext;
 import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_models.Album;
 import bandcamp_scraper_models.Track;
 import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
-public class AlbumScraperSingleThreaded implements AlbumScraper {
+public class AlbumFetcherSingleThread implements RootModelFetcher<Album> {
 
-  private Logger LOG = LoggerFactory.getLogger(AlbumScraperSingleThreaded.class);
+  private Logger LOG = LoggerFactory.getLogger(AlbumFetcherSingleThread.class);
 
-  public Album scrapeAlbum(String url) throws InvalidResourceUrlException {
+  @Override
+  public List<Album> fetchModels(FetchingContext<Album> fetchingContext, DriverContext driverContext,
+      List<String> urls) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'fetchModels'");
+  }
+
+  @Override
+  public Album fetchModel(FetchingContext<Album> fetchingContext, DriverContext driverContext, String url) {
 
     if (!UrlUtils.isAlbumURL(url)) {
-      throw new InvalidResourceUrlException("URL " + url + " is not a valid album url");
+      throw new FetchingException(new InvalidResourceUrlException("URL " + url + " is not a valid album url"));
     }
 
     WebDriver driver = new ChromeDriver();
@@ -56,7 +65,7 @@ public class AlbumScraperSingleThreaded implements AlbumScraper {
       if (driver != null) {
         driver.quit();
       }
-      throw new ScrapingException(String.format("scraping failed for target url %s", url), ex);
+      throw new FetchingException(String.format("scraping failed for target url %s", url), ex);
 
     }
 

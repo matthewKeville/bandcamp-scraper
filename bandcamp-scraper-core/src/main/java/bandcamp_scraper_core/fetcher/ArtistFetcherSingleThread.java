@@ -1,6 +1,7 @@
-package bandcamp_scraper_core.scraper.artist;
+package bandcamp_scraper_core.fetcher;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -10,24 +11,32 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bandcamp_scraper_core.exceptions.fetching.FetchingException;
 import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
-import bandcamp_scraper_core.exceptions.scraping.ScrapingException;
 import bandcamp_scraper_core.pages.ArtistPage;
+import bandcamp_scraper_core.selenium.DriverContext;
 import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.Release;
 import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
-public class ArtistScraperSingleThreaded implements ArtistScraper {
+public class ArtistFetcherSingleThread implements RootModelFetcher<Artist> {
 
-  private Logger LOG = LoggerFactory.getLogger(ArtistScraperSingleThreaded.class);
+  private Logger LOG = LoggerFactory.getLogger(ArtistFetcherSingleThread.class);
 
-  public Artist scrapeArtist(String url) throws InvalidResourceUrlException {
+  @Override
+  public List<Artist> fetchModels(FetchingContext<Artist> fetchingContext,DriverContext driverContext, List<String> urls) {
+    throw new UnsupportedOperationException("Unimplemented method 'fetchModels'");
+  }
+
+  @Override
+  public Artist fetchModel(FetchingContext<Artist> fetchingContext,DriverContext driverContext, String url) throws FetchingException {
 
     if (!UrlUtils.isArtistURL(url)) {
-      throw new InvalidResourceUrlException("URL " + url + " is not a valid artist url");
+      throw new FetchingException(new InvalidResourceUrlException("URL " + url + " is not a valid artist url"));
     }
 
+    // TODO get driver from DriverContext
     WebDriver driver = new ChromeDriver();
     driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
@@ -60,7 +69,7 @@ public class ArtistScraperSingleThreaded implements ArtistScraper {
       if (driver != null) {
         driver.quit();
       }
-      throw new ScrapingException(String.format("scraping failed for target url %s", url), ex);
+      throw new FetchingException(String.format("scraping failed for target url %s", url), ex);
     }
 
     finally {
@@ -68,6 +77,5 @@ public class ArtistScraperSingleThreaded implements ArtistScraper {
     }
 
   }
-
 
 }
