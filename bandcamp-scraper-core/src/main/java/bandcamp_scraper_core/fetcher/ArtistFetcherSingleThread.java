@@ -1,14 +1,13 @@
 package bandcamp_scraper_core.fetcher;
 
-import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bandcamp_scraper_core.exceptions.driver.DriverFactoryException;
 import bandcamp_scraper_core.exceptions.fetching.FetchingException;
 import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
 import bandcamp_scraper_core.extraction.RootModelExtractionContext;
@@ -38,9 +37,12 @@ public class ArtistFetcherSingleThread implements RootModelFetcher<Artist,Artist
       throw new FetchingException(new InvalidResourceUrlException("URL " + url + " is not a valid artist url"));
     }
 
-    // TODO get driver from DriverContext
-    WebDriver driver = new ChromeDriver();
-    driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
+    WebDriver driver;
+    try {
+      driver = driverContext.getDriver();
+    } catch (DriverFactoryException ex) {
+      throw new FetchingException(ex);
+    }
 
     Artist.ArtistBuilder builder = Artist.builder();
     builder.origin(url);

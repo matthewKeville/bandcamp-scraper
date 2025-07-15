@@ -21,7 +21,7 @@ public abstract class AbstractRootModelFetcherIT<M extends RootModel,P extends R
 
   protected abstract RootModelFetcher<M,P,B> getFetcher();
   protected abstract RootModelExtractionContext<M,P,B> getExtractionContext();
-  protected final DriverContext driverContext = new DriverContext();
+  protected final DriverContext driverContext = DriverContext.getDefault();
 
   protected Logger LOG = provideLogger();
   protected abstract Logger provideLogger();
