@@ -1,71 +1,43 @@
 package bandcamp_scraper_core.fetcher;
 
-import java.util.List;
-
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import bandcamp_scraper_core.exceptions.driver.DriverFactoryException;
-import bandcamp_scraper_core.exceptions.fetching.FetchingException;
-import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
-import bandcamp_scraper_core.extraction.RootModelExtractionContext;
 import bandcamp_scraper_core.pages.ArtistPage;
-import bandcamp_scraper_core.selenium.DriverContext;
 import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.Artist.ArtistBuilder;
 import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
-public class ArtistFetcherSingleThread implements RootModelFetcher<Artist,ArtistPage,Artist.ArtistBuilder> {
-
-  private Logger LOG = LoggerFactory.getLogger(ArtistFetcherSingleThread.class);
+public class ArtistFetcherSingleThread extends AbstractRootModelFetcherSingleThread<Artist,ArtistPage,Artist.ArtistBuilder> {
 
   @Override
-  public List<Artist> fetchModels(
-      RootModelExtractionContext<Artist, ArtistPage, ArtistBuilder> extractionContext,
-      DriverContext driverContext, List<String> urls) throws FetchingException {
-    throw new UnsupportedOperationException("Unimplemented method 'fetchModels'");
+  protected Logger getLogger() {
+    return LoggerFactory.getLogger(ArtistFetcherSingleThread.class);
   }
 
   @Override
-  public Artist fetchModel(RootModelExtractionContext<Artist, ArtistPage, ArtistBuilder> extractionContext,
-      DriverContext driverContext, String url) throws FetchingException {
+  protected boolean isValidModelUrl(String url) {
+    return UrlUtils.isArtistURL(url);
+  }
 
-    if (!UrlUtils.isArtistURL(url)) {
-      throw new FetchingException(new InvalidResourceUrlException("URL " + url + " is not a valid artist url"));
-    }
+  @Override
+  protected ArtistPage getPage(WebDriver driver) {
+    return new ArtistPage(driver);
+  }
 
-    WebDriver driver;
-    try {
-      driver = driverContext.getDriver();
-    } catch (DriverFactoryException ex) {
-      throw new FetchingException(ex);
-    }
-
-    Artist.ArtistBuilder builder = Artist.builder();
+  @Override
+  protected ArtistBuilder getBuilder(String url) {
+    var builder = Artist.builder();
     builder.origin(url);
+    return builder;
+  }
 
-    try {
-
-      driver.get(url);
-      ArtistPage artistPage = new ArtistPage(driver);
-      extractionContext.extract(artistPage, builder);
-      builder.status(HydrationStatus.HYDRATED);
-      return builder.build();
-
-    } catch (NoSuchElementException ex) {
-      if (driver != null) {
-        driver.quit();
-      }
-      throw new FetchingException(String.format("scraping failed for target url %s", url), ex);
-    }
-
-    finally {
-      driver.quit();
-    }
-
+  @Override
+  protected Artist build(ArtistBuilder builder) {
+    builder.status(HydrationStatus.HYDRATED);
+    return builder.build();
   }
 
 }
