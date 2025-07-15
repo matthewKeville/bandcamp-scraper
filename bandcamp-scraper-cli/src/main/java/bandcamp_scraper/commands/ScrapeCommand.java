@@ -11,8 +11,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import bandcamp_scraper.logging.ConsoleAwareLogger;
 import bandcamp_scraper_core.exceptions.fetching.FetchingException;
-import bandcamp_scraper_core.fetcher.FetchingContext;
+import bandcamp_scraper_core.extraction.AlbumExtractionContext;
+import bandcamp_scraper_core.extraction.ArtistExtractionContext;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
+import bandcamp_scraper_core.pages.AlbumPage;
+import bandcamp_scraper_core.pages.ArtistPage;
 import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_models.Album;
 import bandcamp_scraper_models.Artist;
@@ -29,16 +32,16 @@ public class ScrapeCommand implements Runnable {
 
     // TODO : Slot into AppSettings construct through application.yml
     private final String issueTrackerUrl = "https://github.com/matthewKeville/bandcamp-scraper/issues";
-    private DriverContext driverContext = new DriverContext();
-    private RootModelFetcher<Artist> artistFetcher;
-    private FetchingContext<Artist> artistFetcherContext = FetchingContext.dummy();
-    private RootModelFetcher<Album> albumFetcher;
-    private FetchingContext<Album> albumFetchingContext = FetchingContext.dummy();
+    private DriverContext driverContext = DriverContext.getDefault();
+    private RootModelFetcher<Artist,ArtistPage,Artist.ArtistBuilder> artistFetcher;
+    private ArtistExtractionContext artistExtractionContext = new ArtistExtractionContext();
+    private RootModelFetcher<Album,AlbumPage,Album.AlbumBuilder> albumFetcher;
+    private AlbumExtractionContext albumExtractionContext = new AlbumExtractionContext();
     private ObjectMapper mapper;
     public static ConsoleAwareLogger LOG = ConsoleAwareLogger.getLogger(ScrapeCommand.class);
 
-    public ScrapeCommand(@Autowired RootModelFetcher<Artist> artistFetcher,
-        @Autowired  RootModelFetcher<Album> albumFetcher,
+    public ScrapeCommand(@Autowired RootModelFetcher<Artist,ArtistPage,Artist.ArtistBuilder> artistFetcher,
+        @Autowired RootModelFetcher<Album,AlbumPage,Album.AlbumBuilder> albumFetcher,
         @Autowired ObjectMapper objectMapper
         ) {
         this.artistFetcher = artistFetcher;
@@ -53,11 +56,11 @@ public class ScrapeCommand implements Runnable {
     public void run() {
       try {
         if ( UrlUtils.isArtistURL(url) ) {
-          Artist artist = artistFetcher.fetchModel(artistFetcherContext,driverContext,url);
+          Artist artist = artistFetcher.fetchModel(artistExtractionContext,driverContext,url);
           String json = mapper.writeValueAsString(artist);
           LOG.printOut(json);
         } else if ( UrlUtils.isAlbumURL(url)) {
-          Album album = albumFetcher.fetchModel(albumFetchingContext,driverContext,url);
+          Album album = albumFetcher.fetchModel(albumExtractionContext,driverContext,url);
           String json = mapper.writeValueAsString(album);
           LOG.printOut(json);
         } else if ( UrlUtils.isTrackURL(url)) {
