@@ -2,8 +2,6 @@ package bandcamp_scraper_core.fetcher;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -13,24 +11,28 @@ import org.slf4j.LoggerFactory;
 
 import bandcamp_scraper_core.exceptions.fetching.FetchingException;
 import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
+import bandcamp_scraper_core.extraction.RootModelExtractionContext;
 import bandcamp_scraper_core.pages.ArtistPage;
 import bandcamp_scraper_core.selenium.DriverContext;
 import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_models.Artist;
-import bandcamp_scraper_models.Release;
+import bandcamp_scraper_models.Artist.ArtistBuilder;
 import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
-public class ArtistFetcherSingleThread implements RootModelFetcher<Artist> {
+public class ArtistFetcherSingleThread implements RootModelFetcher<Artist,ArtistPage,Artist.ArtistBuilder> {
 
   private Logger LOG = LoggerFactory.getLogger(ArtistFetcherSingleThread.class);
 
   @Override
-  public List<Artist> fetchModels(FetchingContext<Artist> fetchingContext,DriverContext driverContext, List<String> urls) {
+  public List<Artist> fetchModels(
+      RootModelExtractionContext<Artist, ArtistPage, ArtistBuilder> extractionContext,
+      DriverContext driverContext, List<String> urls) throws FetchingException {
     throw new UnsupportedOperationException("Unimplemented method 'fetchModels'");
   }
 
   @Override
-  public Artist fetchModel(FetchingContext<Artist> fetchingContext,DriverContext driverContext, String url) throws FetchingException {
+  public Artist fetchModel(RootModelExtractionContext<Artist, ArtistPage, ArtistBuilder> extractionContext,
+      DriverContext driverContext, String url) throws FetchingException {
 
     if (!UrlUtils.isArtistURL(url)) {
       throw new FetchingException(new InvalidResourceUrlException("URL " + url + " is not a valid artist url"));
@@ -47,21 +49,7 @@ public class ArtistFetcherSingleThread implements RootModelFetcher<Artist> {
 
       driver.get(url);
       ArtistPage artistPage = new ArtistPage(driver);
-
-      LOG.info("scraping artistName");
-      String artistName = artistPage.getArtistName();
-      builder.name(artistName);
-
-      LOG.info("scraping releaseItems");
-      Set<Release> releaseItems = artistPage.getReleasesItems();
-      builder.releases(releaseItems);
-
-      if (artistPage.hasSidebar()) {
-        LOG.info("scraping location");
-        Optional<String> optLocation = artistPage.getBandNameLocation();
-        optLocation.ifPresent( loc -> builder.location(loc));
-      }
-
+      extractionContext.extract(artistPage, builder);
       builder.status(HydrationStatus.HYDRATED);
       return builder.build();
 

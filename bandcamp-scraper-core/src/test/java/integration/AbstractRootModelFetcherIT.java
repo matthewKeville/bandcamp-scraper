@@ -10,16 +10,17 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 
-import bandcamp_scraper_core.fetcher.FetchingContext;
+import bandcamp_scraper_core.extraction.RootModelExtractionContext;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
+import bandcamp_scraper_core.pages.RootModelPage;
 import bandcamp_scraper_core.selenium.DriverContext;
 import bandcamp_scraper_models.RootModel;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public abstract class AbstractRootModelFetcherIT<T extends RootModel> {
+public abstract class AbstractRootModelFetcherIT<M extends RootModel,P extends RootModelPage<M>,B> {
 
-  protected abstract RootModelFetcher<T> getFetcher();
-  protected abstract FetchingContext<T> getFetchingContext();
+  protected abstract RootModelFetcher<M,P,B> getFetcher();
+  protected abstract RootModelExtractionContext<M,P,B> getExtractionContext();
   protected final DriverContext driverContext = new DriverContext();
 
   protected Logger LOG = provideLogger();
@@ -28,10 +29,10 @@ public abstract class AbstractRootModelFetcherIT<T extends RootModel> {
 
   @ParameterizedTest
   @MethodSource("provideTestCases")
-  void fetchesCorrectModel(String modelUrl, T expectedModel) throws Exception {
+  void fetchesCorrectModel(String modelUrl, M expectedModel) throws Exception {
     var fetcher = getFetcher();
-    var fetchingContext = getFetchingContext();
-    T model = fetcher.fetchModel(fetchingContext, driverContext, modelUrl);
+    var extractionContext = getExtractionContext();
+    M model = fetcher.fetchModel(extractionContext, driverContext, modelUrl);
     assertThat(expectedModel)
       .usingRecursiveComparison()
       .as(modelUrl  + "fetches correctly")

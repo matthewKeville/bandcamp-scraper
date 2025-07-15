@@ -16,9 +16,10 @@ import org.slf4j.LoggerFactory;
 import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
 import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_core.utils.selenium.DriverUtils;
+import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.Release;
 
-public class ArtistPage {
+public class ArtistPage implements RootModelPage<Artist> {
 
   private WebDriver driver;
   private Logger LOG = LoggerFactory.getLogger(ArtistPage.class);

@@ -7,23 +7,25 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bandcamp_scraper_core.extraction.AlbumExtractionContext;
+import bandcamp_scraper_core.extraction.RootModelExtractionContext;
 import bandcamp_scraper_core.fetcher.AlbumFetcherSingleThread;
-import bandcamp_scraper_core.fetcher.FetchingContext;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
+import bandcamp_scraper_core.pages.AlbumPage;
 import bandcamp_scraper_models.Album;
 import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 import bandcamp_scraper_models.Track;
 
-public class AlbumFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Album> {
+public class AlbumFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Album,AlbumPage,Album.AlbumBuilder> {
 
   @Override
-  protected RootModelFetcher<Album> getFetcher() {
+  protected RootModelFetcher<Album,AlbumPage,Album.AlbumBuilder> getFetcher() {
     return new AlbumFetcherSingleThread();
   }
 
   @Override
-  protected FetchingContext<Album> getFetchingContext() {
-    return FetchingContext.dummy();
+  protected RootModelExtractionContext<Album,AlbumPage,Album.AlbumBuilder> getExtractionContext() {
+    return new AlbumExtractionContext();
   }
 
   @Override
@@ -136,5 +138,5 @@ public class AlbumFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Album
         )
     );
   }
-  
+
 }
