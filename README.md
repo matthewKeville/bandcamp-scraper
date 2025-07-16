@@ -248,7 +248,7 @@ launch.sh scrape -u=https://slimegirls.bandcamp.com/album/vacation-wasteland-ep
 
 ## 📐 Design & Architecture
 
-Explore the [v1.0.0 Design Documentation](docs/design.md) to understand the intended architecture and vision of the core library.
+Explore the [v0.2.0 Design Documentation](docs/design.md) to understand the intended architecture and vision of the core library.
 
 ---
 
