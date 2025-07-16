@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode(exclude = "presentType")
-public class Release {
+public class Release implements Model {
 
   //Regex here as static member
   private static final Pattern ALBUM_PATTERN = Pattern.compile("^https://[a-zA-Z0-9-]+\\.bandcamp\\.com/album/[^/]+/?$");

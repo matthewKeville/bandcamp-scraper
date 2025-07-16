@@ -20,9 +20,10 @@ import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
 import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_core.utils.selenium.DriverUtils;
 import bandcamp_scraper_models.Track;
+import bandcamp_scraper_models.Album;
 import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
-public class AlbumPage {
+public class AlbumPage implements RootModelPage<Album>  {
 
   private WebDriver driver;
   private Logger LOG = LoggerFactory.getLogger(AlbumPage.class);
