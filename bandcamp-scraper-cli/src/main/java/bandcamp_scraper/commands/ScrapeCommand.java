@@ -4,11 +4,13 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import bandcamp_scraper.AppSettings;
 import bandcamp_scraper.logging.ConsoleAwareLogger;
 import bandcamp_scraper_core.exceptions.fetching.FetchingException;
 import bandcamp_scraper_core.extraction.AlbumExtractionContext;
@@ -30,23 +32,28 @@ import bandcamp_scraper_core.selenium.DriverContext;
 )
 public class ScrapeCommand implements Runnable {
 
-    // TODO : Slot into AppSettings construct through application.yml
-    private final String issueTrackerUrl = "https://github.com/matthewKeville/bandcamp-scraper/issues";
-    private DriverContext driverContext = DriverContext.getDefault();
+    private AppSettings appSettings;
+    private DriverContext driverContext;
     private RootModelFetcher<Artist,ArtistPage,Artist.ArtistBuilder> artistFetcher;
-    private ArtistExtractionContext artistExtractionContext = new ArtistExtractionContext();
     private RootModelFetcher<Album,AlbumPage,Album.AlbumBuilder> albumFetcher;
-    private AlbumExtractionContext albumExtractionContext = new AlbumExtractionContext();
     private ObjectMapper mapper;
+
+    private ArtistExtractionContext artistExtractionContext = new ArtistExtractionContext();
+    private AlbumExtractionContext albumExtractionContext = new AlbumExtractionContext();
     public static ConsoleAwareLogger LOG = ConsoleAwareLogger.getLogger(ScrapeCommand.class);
 
-    public ScrapeCommand(@Autowired RootModelFetcher<Artist,ArtistPage,Artist.ArtistBuilder> artistFetcher,
+    public ScrapeCommand(
+        @Autowired RootModelFetcher<Artist,ArtistPage,Artist.ArtistBuilder> artistFetcher,
         @Autowired RootModelFetcher<Album,AlbumPage,Album.AlbumBuilder> albumFetcher,
-        @Autowired ObjectMapper objectMapper
+        @Autowired ObjectMapper objectMapper,
+        @Lazy DriverContext driverContext,
+        @Autowired AppSettings appSettings
         ) {
         this.artistFetcher = artistFetcher;
         this.albumFetcher = albumFetcher;
         this.mapper = objectMapper;
+        this.driverContext = driverContext;
+        this.appSettings = appSettings;
     }
 
     @Option(names = {"-u", "--url"}, description = "URL of resource to scrape", required = true)
@@ -76,10 +83,10 @@ public class ScrapeCommand implements Runnable {
       } 
       catch (FetchingException ex) {
           LOG.printErr(String.format("Encountered an internal error fetching the resource",url));
-          LOG.printErr(String.format("Please create an issue ticket @ ",issueTrackerUrl));
+          LOG.printErr(String.format("Please create an issue ticket @ ",appSettings.getIssueTrackerUrl()));
       } catch (JsonProcessingException ex) {
           LOG.printErr(String.format("Encountered an internal error serializing the resource",url));
-          LOG.printErr(String.format("Please create an issue ticket @ ",issueTrackerUrl));
+          LOG.printErr(String.format("Please create an issue ticket @ ",appSettings.getIssueTrackerUrl()));
       }
 
     }
