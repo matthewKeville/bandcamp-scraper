@@ -14,13 +14,16 @@ import bandcamp_scraper.commands.ScrapeCommand;
 import bandcamp_scraper_core.fetcher.AlbumFetcherSingleThread;
 import bandcamp_scraper_core.fetcher.ArtistFetcherSingleThread;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
+import bandcamp_scraper_core.fetcher.TrackFetcherSingleThread;
 import bandcamp_scraper_core.pages.AlbumPage;
 import bandcamp_scraper_core.pages.ArtistPage;
+import bandcamp_scraper_core.pages.TrackPage;
 import bandcamp_scraper_core.selenium.BasicDriverFactory;
 import bandcamp_scraper_core.selenium.DriverContext;
 import bandcamp_scraper_models.Album;
 import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.BandcampObjectMapper;
+import bandcamp_scraper_models.Track;
 import picocli.CommandLine;
 
 @Configuration
@@ -42,6 +45,10 @@ public class AppConfiguration {
   @Bean
   public RootModelFetcher<Album,AlbumPage,Album.AlbumBuilder> albumScraper() {
     return new AlbumFetcherSingleThread();
+  }
+  @Bean
+  public RootModelFetcher<Track,TrackPage,Track.TrackBuilder> trackScraper() {
+    return new TrackFetcherSingleThread();
   }
   @Bean 
   public ObjectMapper objectMapper() {

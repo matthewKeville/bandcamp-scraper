@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
 import bandcamp_scraper_core.utils.http.UrlUtils;
+import bandcamp_scraper_core.utils.parsing.ParsingUtils;
 import bandcamp_scraper_core.utils.selenium.DriverUtils;
 import bandcamp_scraper_models.Track;
 import bandcamp_scraper_models.Album;
@@ -206,28 +207,13 @@ public class AlbumPage implements RootModelPage<Album>  {
       LOG.warn("unexpected numer of elements for " + trackTimeSpanLocator );
     }
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("mm:ss");
-    try {
-
-      String timeText = ecpTrackTimeSpan.getElm().getText();
-      Pattern pattern = Pattern.compile("(\\d+):(\\d+)");
-      Matcher matcher = pattern.matcher(timeText);
-      if (!matcher.find()) {
-        LOG.warn("couldn't locate time match in : " + timeText);
-        return false;
-      }
-
-      int minutes = Integer.parseInt(matcher.group(1));
-      int seconds = Integer.parseInt(matcher.group(2));
-      int elapsed = minutes * 60 + seconds;
-
-      builder.duration(elapsed);
-      return true;
-
-    } catch (NumberFormatException ex) {
-      LOG.warn("time parse exception " + ex.getMessage());
+    String timeText = ecpTrackTimeSpan.getElm().getText();
+    Optional<Integer> elapsed = ParsingUtils.tryParseDurationInSeconds(timeText);
+    if (elapsed.isEmpty()) {
       return false;
     }
+    builder.duration(elapsed.get());
+    return true;
 
   }
 

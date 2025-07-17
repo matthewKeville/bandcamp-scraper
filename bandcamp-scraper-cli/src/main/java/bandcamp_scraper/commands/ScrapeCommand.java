@@ -15,12 +15,15 @@ import bandcamp_scraper.logging.ConsoleAwareLogger;
 import bandcamp_scraper_core.exceptions.fetching.FetchingException;
 import bandcamp_scraper_core.extraction.AlbumExtractionContext;
 import bandcamp_scraper_core.extraction.ArtistExtractionContext;
+import bandcamp_scraper_core.extraction.TrackExtractionContext;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
 import bandcamp_scraper_core.pages.AlbumPage;
 import bandcamp_scraper_core.pages.ArtistPage;
+import bandcamp_scraper_core.pages.TrackPage;
 import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_models.Album;
 import bandcamp_scraper_models.Artist;
+import bandcamp_scraper_models.Track;
 import bandcamp_scraper_core.selenium.DriverContext;
 
 @Component
@@ -36,21 +39,25 @@ public class ScrapeCommand implements Runnable {
     private DriverContext driverContext;
     private RootModelFetcher<Artist,ArtistPage,Artist.ArtistBuilder> artistFetcher;
     private RootModelFetcher<Album,AlbumPage,Album.AlbumBuilder> albumFetcher;
+    private RootModelFetcher<Track,TrackPage,Track.TrackBuilder> trackFetcher;
     private ObjectMapper mapper;
 
     private ArtistExtractionContext artistExtractionContext = new ArtistExtractionContext();
     private AlbumExtractionContext albumExtractionContext = new AlbumExtractionContext();
+    private TrackExtractionContext trackExtractionContext = new TrackExtractionContext();
     public static ConsoleAwareLogger LOG = ConsoleAwareLogger.getLogger(ScrapeCommand.class);
 
     public ScrapeCommand(
         @Autowired RootModelFetcher<Artist,ArtistPage,Artist.ArtistBuilder> artistFetcher,
         @Autowired RootModelFetcher<Album,AlbumPage,Album.AlbumBuilder> albumFetcher,
+        @Autowired RootModelFetcher<Track,TrackPage,Track.TrackBuilder> trackFetcher,
         @Autowired ObjectMapper objectMapper,
         @Lazy DriverContext driverContext,
         @Autowired AppSettings appSettings
         ) {
         this.artistFetcher = artistFetcher;
         this.albumFetcher = albumFetcher;
+        this.trackFetcher = trackFetcher;
         this.mapper = objectMapper;
         this.driverContext = driverContext;
         this.appSettings = appSettings;
@@ -71,7 +78,9 @@ public class ScrapeCommand implements Runnable {
           String json = mapper.writeValueAsString(album);
           LOG.printOut(json);
         } else if ( UrlUtils.isTrackURL(url)) {
-          LOG.printErr("Track Scraping Not Implemented");
+          Track track = trackFetcher.fetchModel(trackExtractionContext,driverContext,url);
+          String json = mapper.writeValueAsString(track);
+          LOG.printOut(json);
         } else {
           LOG.printErr(String.format("Invalid URL : %s",url));
           LOG.printErr("- - -");
