@@ -64,6 +64,11 @@
 
     <dependency>
       <groupId>com.keville</groupId>
+      <artifactId>bandcamp-scraper-shared</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.keville</groupId>
       <artifactId>bandcamp-scraper-models</artifactId>
       <scope>compile</scope>
     </dependency>

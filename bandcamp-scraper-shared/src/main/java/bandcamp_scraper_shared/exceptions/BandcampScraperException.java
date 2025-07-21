@@ -1,4 +1,4 @@
-package bandcamp_scraper_core.exceptions;
+package bandcamp_scraper_shared.exceptions;
 
 /**
  * Base class for all bandcamp_scraper_core exceptions

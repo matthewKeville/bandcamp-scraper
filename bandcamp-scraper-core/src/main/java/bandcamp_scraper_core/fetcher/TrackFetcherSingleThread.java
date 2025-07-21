@@ -5,9 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bandcamp_scraper_core.pages.TrackPage;
-import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 import bandcamp_scraper_models.Track;
+import bandcamp_scraper_shared.utils.http.UrlUtils;
 
 public class TrackFetcherSingleThread extends AbstractRootModelFetcherSingleThread<Track,TrackPage,Track.TrackBuilder> {
 

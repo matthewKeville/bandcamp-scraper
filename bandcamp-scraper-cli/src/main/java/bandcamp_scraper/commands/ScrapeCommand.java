@@ -20,10 +20,11 @@ import bandcamp_scraper_core.fetcher.RootModelFetcher;
 import bandcamp_scraper_core.pages.AlbumPage;
 import bandcamp_scraper_core.pages.ArtistPage;
 import bandcamp_scraper_core.pages.TrackPage;
-import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_models.Album;
 import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.Track;
+import bandcamp_scraper_shared.utils.http.UrlUtils;
+import bandcamp_scraper_shared.enums.RootModelType;
 import bandcamp_scraper_core.selenium.DriverContext;
 
 @Component
@@ -69,25 +70,33 @@ public class ScrapeCommand implements Runnable {
     @Override
     public void run() {
       try {
-        if ( UrlUtils.isArtistURL(url) ) {
-          Artist artist = artistFetcher.fetchModel(artistExtractionContext,driverContext,url);
-          String json = mapper.writeValueAsString(artist);
-          LOG.printOut(json);
-        } else if ( UrlUtils.isAlbumURL(url)) {
-          Album album = albumFetcher.fetchModel(albumExtractionContext,driverContext,url);
-          String json = mapper.writeValueAsString(album);
-          LOG.printOut(json);
-        } else if ( UrlUtils.isTrackURL(url)) {
-          Track track = trackFetcher.fetchModel(trackExtractionContext,driverContext,url);
-          String json = mapper.writeValueAsString(track);
-          LOG.printOut(json);
-        } else {
-          LOG.printErr(String.format("Invalid URL : %s",url));
-          LOG.printErr("- - -");
-          LOG.printErr("Supported Resource URLS");
-          LOG.printErr("Artist : " + UrlUtils.ARTIST_SLUG_URL);
-          LOG.printErr("Album : " + UrlUtils.ALBUM_SLUG_URL);
-          LOG.printErr("Track : " + UrlUtils.TRACK_SLUG_URL);
+        switch ( UrlUtils.resolveResourceModelType(url) ) {
+          case RootModelType.ARTIST: {
+            Artist artist = artistFetcher.fetchModel(artistExtractionContext,driverContext,url);
+            String json = mapper.writeValueAsString(artist);
+            LOG.printOut(json);
+            break;
+          }
+          case RootModelType.ALBUM: {
+            Album album = albumFetcher.fetchModel(albumExtractionContext,driverContext,url);
+            String json = mapper.writeValueAsString(album);
+            LOG.printOut(json);
+            break;
+          }
+          case RootModelType.TRACK: {
+            Track track = trackFetcher.fetchModel(trackExtractionContext,driverContext,url);
+            String json = mapper.writeValueAsString(track);
+            LOG.printOut(json);
+            break;
+          }
+          default:
+            LOG.printErr(String.format("Invalid URL : %s",url));
+            LOG.printErr("- - -");
+            LOG.printErr("Supported Resource URLS");
+            LOG.printErr("Artist : " + UrlUtils.ARTIST_SLUG_URL);
+            LOG.printErr("Album : " + UrlUtils.ALBUM_SLUG_URL);
+            LOG.printErr("Track : " + UrlUtils.TRACK_SLUG_URL);
+            break;
         }
       } 
       catch (FetchingException ex) {

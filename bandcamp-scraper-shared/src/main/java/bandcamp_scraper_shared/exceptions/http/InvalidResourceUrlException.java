@@ -1,7 +1,6 @@
+package bandcamp_scraper_shared.exceptions.http;
 
-package bandcamp_scraper_core.exceptions.http;
-
-import bandcamp_scraper_core.exceptions.BandcampScraperException;
+import bandcamp_scraper_shared.exceptions.BandcampScraperException;
 
 /**
  * Thrown when a URL does not match expected resource format.

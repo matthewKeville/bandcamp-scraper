@@ -69,6 +69,11 @@
 
     <!-- inherit : compiled -->
 
+    <dependency>
+      <groupId>com.keville</groupId>
+      <artifactId>bandcamp-scraper-shared</artifactId>
+    </dependency>
+
     <!-- 
       this should be provided, but i'm getting a headache
       with maven and managing this. Module should be a compiled dep

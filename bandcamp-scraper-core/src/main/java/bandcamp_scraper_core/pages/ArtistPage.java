@@ -13,11 +13,11 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
-import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_core.utils.selenium.DriverUtils;
 import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.Release;
+import bandcamp_scraper_shared.exceptions.http.InvalidResourceUrlException;
+import bandcamp_scraper_shared.utils.http.UrlUtils;
 
 public class ArtistPage implements RootModelPage<Artist> {
 

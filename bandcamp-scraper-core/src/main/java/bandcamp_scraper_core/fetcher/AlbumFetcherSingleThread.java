@@ -5,10 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bandcamp_scraper_core.pages.AlbumPage;
-import bandcamp_scraper_core.utils.http.UrlUtils;
 import bandcamp_scraper_models.Album;
 import bandcamp_scraper_models.Album.AlbumBuilder;
 import bandcamp_scraper_models.HydratableModel.HydrationStatus;
+import bandcamp_scraper_shared.utils.http.UrlUtils;
 
 public class AlbumFetcherSingleThread extends AbstractRootModelFetcherSingleThread<Album,AlbumPage,Album.AlbumBuilder> {
 

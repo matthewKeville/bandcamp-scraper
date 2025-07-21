@@ -1,11 +1,11 @@
 package bandcamp_scraper_core.exceptions.fetching;
 
-import bandcamp_scraper_core.exceptions.BandcampScraperException;
+import bandcamp_scraper_core.exceptions.BandcampScraperCoreException;
 
 /**
  * Base class for all exceptions related to Fetchers
  */
-public class FetchingException extends BandcampScraperException {
+public class FetchingException extends BandcampScraperCoreException {
 
     public FetchingException(String message) {
         super(message);

@@ -6,9 +6,9 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 
+import bandcamp_scraper_shared.exceptions.http.InvalidResourceUrlException;
 import bandcamp_scraper_core.exceptions.driver.DriverFactoryException;
 import bandcamp_scraper_core.exceptions.fetching.FetchingException;
-import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
 import bandcamp_scraper_core.extraction.RootModelExtractionContext;
 import bandcamp_scraper_core.pages.RootModelPage;
 import bandcamp_scraper_core.selenium.DriverContext;

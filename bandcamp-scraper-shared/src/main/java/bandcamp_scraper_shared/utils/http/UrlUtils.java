@@ -1,11 +1,9 @@
-package bandcamp_scraper_core.utils.http;
+package bandcamp_scraper_shared.utils.http;
 
 import java.util.regex.Pattern;
 
-import bandcamp_scraper_core.exceptions.http.InvalidResourceUrlException;
-import bandcamp_scraper_models.Album;
-import bandcamp_scraper_models.Artist;
-import bandcamp_scraper_models.Track;
+import bandcamp_scraper_shared.enums.RootModelType;
+import bandcamp_scraper_shared.exceptions.http.InvalidResourceUrlException;
 
 public class UrlUtils {
 
@@ -41,11 +39,11 @@ public class UrlUtils {
         return TRACK_URL.matcher(url).matches();
     }
 
-    public static Class<?> resolveResourceModelType(String url) throws InvalidResourceUrlException {
+    public static RootModelType resolveResourceModelType(String url) throws InvalidResourceUrlException {
       if (url != null && !url.isEmpty()) {
-        if (isArtistURL(url)) return Artist.class;
-        if (isAlbumURL(url)) return Album.class;
-        if (isTrackURL(url)) return Track.class;
+        if (isArtistURL(url)) return RootModelType.ARTIST;
+        if (isAlbumURL(url)) return RootModelType.ALBUM;
+        if (isTrackURL(url)) return RootModelType.TRACK;
       }
       throw new InvalidResourceUrlException("Unable to determine Resource class for " + url);
     }

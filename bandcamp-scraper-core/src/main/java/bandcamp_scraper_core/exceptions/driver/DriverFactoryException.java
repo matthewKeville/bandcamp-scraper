@@ -1,8 +1,8 @@
 package bandcamp_scraper_core.exceptions.driver;
 
-import bandcamp_scraper_core.exceptions.BandcampScraperException;
+import bandcamp_scraper_core.exceptions.BandcampScraperCoreException;
 
-public class DriverFactoryException extends BandcampScraperException {
+public class DriverFactoryException extends BandcampScraperCoreException {
 
     public DriverFactoryException(String message) {
         super(message);

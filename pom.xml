@@ -10,6 +10,7 @@
   <!-- Note to self : module order matters -->
   <modules>
     <module>shared-resources-testing</module>
+    <module>bandcamp-scraper-shared</module>
     <module>bandcamp-scraper-models</module>
     <module>bandcamp-scraper-core</module>
     <module>bandcamp-scraper-cli</module>
@@ -26,6 +27,12 @@
 
   <dependencyManagement>
     <dependencies>
+
+      <dependency>
+        <groupId>com.keville</groupId>
+        <artifactId>bandcamp-scraper-shared</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>com.keville</groupId>
