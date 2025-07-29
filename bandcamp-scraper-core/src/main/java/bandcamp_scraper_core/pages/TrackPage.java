@@ -12,10 +12,7 @@ import org.slf4j.LoggerFactory;
 import bandcamp_scraper_core.utils.parsing.ParsingUtils;
 import bandcamp_scraper_core.utils.selenium.DriverUtils;
 import bandcamp_scraper_core.utils.selenium.ElmCountPair;
-import bandcamp_scraper_models.Release;
-import bandcamp_scraper_models.RootModelRef;
 import bandcamp_scraper_models.Track;
-import bandcamp_scraper_shared.enums.RootModelType;
 import bandcamp_scraper_shared.utils.http.UrlUtils;
 
 public class TrackPage implements RootModelPage<Track> {
@@ -94,6 +91,7 @@ public class TrackPage implements RootModelPage<Track> {
       }
       artistLink = elmsLink.get(1).getAttribute("href");
     }
+    artistLink+="music"; //my domain treats /music as cannonical artist page
     return Optional.of(artistLink);
 
   }

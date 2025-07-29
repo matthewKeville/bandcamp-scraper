@@ -1,16 +1,22 @@
 package bandcamp_scraper_models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import bandcamp_scraper_shared.enums.RootModelType;
 import bandcamp_scraper_shared.exceptions.http.InvalidResourceUrlException;
 import bandcamp_scraper_shared.utils.http.UrlUtils;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
+@Getter
+@EqualsAndHashCode
 public class RootModelRef {
 
   private final String origin;
   private final RootModelType type;
 
+  @JsonCreator
   public RootModelRef(@JsonProperty("type") RootModelType type, @JsonProperty("origin") String origin) 
       throws IllegalArgumentException, InvalidResourceUrlException{
     switch (type) {

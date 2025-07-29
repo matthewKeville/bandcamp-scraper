@@ -19,7 +19,11 @@ public class Track extends RootModel {
   //mechanisms, and in that case the associations are lost unless
   //we embed them here.
   private Optional<RootModelRef> album = Optional.empty();
-  private Optional<RootModelRef> artist = Optional.empty();
+  //future note : Collabs will link back to a primary artist
+  //but the Artist display name on the track may reflect
+  //the nature of the collab
+  //https://apesofthestate.bandcamp.com/album/they-cant-kill-us-all
+  private RootModelRef artist;
   private String title;
   private int duration;
 }

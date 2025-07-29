@@ -1,6 +1,7 @@
 package integration;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -13,7 +14,9 @@ import bandcamp_scraper_core.extraction.RootModelExtractionContext;
 import bandcamp_scraper_core.fetcher.TrackFetcherSingleThread;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
 import bandcamp_scraper_core.pages.TrackPage;
+import bandcamp_scraper_models.RootModelRef;
 import bandcamp_scraper_models.Track;
+import bandcamp_scraper_shared.enums.RootModelType;
 import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
 public class TrackFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Track,TrackPage,Track.TrackBuilder> {
@@ -42,6 +45,8 @@ public class TrackFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Track
           .title("WEIGHTLESS")
           .duration(144)
           .status(HydrationStatus.HYDRATED)
+          .artist(new RootModelRef(RootModelType.ARTIST,"https://femtanyl.bandcamp.com/music"))
+          .album(Optional.of(new RootModelRef(RootModelType.ALBUM,"https://femtanyl.bandcamp.com/album/reactor")))
           .origin("https://femtanyl.bandcamp.com/track/weightless-2")
           .build()
       )

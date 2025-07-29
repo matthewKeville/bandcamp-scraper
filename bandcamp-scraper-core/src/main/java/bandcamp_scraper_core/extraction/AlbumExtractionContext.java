@@ -46,9 +46,7 @@ public class AlbumExtractionContext extends RootModelExtractionContext<Album,Alb
         trackBuilder.title(page.extractTrackTitle(i));
         trackBuilder.duration(page.extractTrackTime(i));
         trackBuilder.artist(
-          Optional.of(
             new RootModelRef(RootModelType.ARTIST, UrlUtils.getArtistBaseUrl(origin)+"/music")
-          )
         );
         trackBuilder.album(
           Optional.of(

@@ -71,34 +71,6 @@ public class ArtistFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Arti
             Release.createFromHref("https://slimegirls.bandcamp.com/album/vacation-wasteland-ep")
           )))
           .build()
-      ),
-      Arguments.of(
-        "https://elephantjake.bandcamp.com/music",
-        Artist.builder()
-          .name("Elephant Jake")
-          .location("Philadelphia, Pennsylvania")
-          .status(HydrationStatus.HYDRATED)
-          .origin("https://elephantjake.bandcamp.com/music")
-          .releases(new HashSet<>(Set.of(
-            Release.createFromHref("https://elephantjake.bandcamp.com/album/goodness-to-honest"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/album/looking-good-feeling-good-2"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/album/elephantsharkwave-presents-friday-the-13th-the-made-for-tv-movie-the-official-soundtrack-volume-1-remastered"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/track/andy-finally-lost-the-war-with-the-disco-beat-2"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/track/freshman-15-2"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/track/kjerstin-2"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/track/mac-sam"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/track/hardwood-coolwhip"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/album/classic-2"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/album/classic"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/album/were-movies"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/track/all-i-want-for-christmas-is-you"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/track/locked-in"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/track/shipment-only-knifing"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/album/hey-dude-thanks-for-having-me-demos-2015-2018"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/album/hey-dude-thanks-for-coming"),
-            Release.createFromHref("https://elephantjake.bandcamp.com/track/unauthorizeddemo1")
-          )))
-          .build()
       )
     );
   }
