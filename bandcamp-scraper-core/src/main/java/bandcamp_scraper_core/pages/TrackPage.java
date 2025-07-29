@@ -1,10 +1,6 @@
 package bandcamp_scraper_core.pages;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -17,7 +13,10 @@ import bandcamp_scraper_core.utils.parsing.ParsingUtils;
 import bandcamp_scraper_core.utils.selenium.DriverUtils;
 import bandcamp_scraper_core.utils.selenium.ElmCountPair;
 import bandcamp_scraper_models.Release;
+import bandcamp_scraper_models.RootModelRef;
 import bandcamp_scraper_models.Track;
+import bandcamp_scraper_shared.enums.RootModelType;
+import bandcamp_scraper_shared.utils.http.UrlUtils;
 
 public class TrackPage implements RootModelPage<Track> {
 
@@ -26,6 +25,7 @@ public class TrackPage implements RootModelPage<Track> {
 
   private By trackTitleHeaderLocator = By.className("trackTitle");
   private By timeTotalSpanLocator = By.className("time_total");
+  private By trackAlbumTitleHeaderLinks = By.cssSelector("h3.albumTitle a");
 
   public TrackPage(WebDriver driver) {
     this.driver = driver;
@@ -37,7 +37,7 @@ public class TrackPage implements RootModelPage<Track> {
     return trackTitle;
   }
 
-  public Optional<Integer> getTrackDuration() {
+  public Optional<Integer> getTrackTime() {
     ElmCountPair ecp = DriverUtils.findElmCountPair(driver, timeTotalSpanLocator);
     if (ecp.getCount() == 0 ) {
       LOG.warn("couldn't locate track duration by : " + timeTotalSpanLocator);
@@ -49,90 +49,53 @@ public class TrackPage implements RootModelPage<Track> {
     return ParsingUtils.tryParseDurationInSeconds(ecp.getElm().getText());
   }
 
-  // //TODO : probably should throw if artistName is null
-  // public String getArtistName() throws NoSuchElementException {
-  //   WebElement elmMetaTagSiteName = driver.findElement(elmMetaTagSiteNameLocator);
-  //   String artistName = elmMetaTagSiteName.getDomAttribute("content");
-  //   return artistName;
-  // }
-  //
-  // public Set<Release> getReleasesItems() {
-  //
-  //   try {
-  //
-  //     var ecp = DriverUtils.findElmCountPair(driver,musicGridLocator);
-  //
-  //     if ( ecp.getCount() == 0 ) {
-  //       return Collections.emptySet();
-  //     }
-  //
-  //     if (ecp.getCount() > 1 ) {
-  //       LOG.warn("found multiple #music-grid elements");
-  //     }
-  //
-  //     WebElement elmMusicGrid = ecp.getElm();
-  //     List<WebElement> elmsReleaseLink = elmMusicGrid.findElements(By.cssSelector("li a"));
-  //
-  //     String artistBaseUrl = UrlUtils.getArtistBaseUrl(driver.getCurrentUrl());
-  //
-  //     Set<Release> releaseItems = elmsReleaseLink.stream()
-  //       .map( elmA -> elmA.getDomAttribute("href"))
-  //       .filter( href -> href != null )
-  //       .map(href -> artistBaseUrl + href)
-  //       .map(href -> Release.tryCreateFromHref(href))
-  //       .filter(opt -> opt.isPresent())
-  //       .map( opt -> opt.get())
-  //       .collect(Collectors.toSet());
-  //
-  //     return releaseItems;
-  //
-  //   } catch (NoSuchElementException | InvalidResourceUrlException ex ) {
-  //       return Collections.emptySet();
-  //   }
-  //
-  // }
-  //
-  // public boolean hasSidebar() {
-  //
-  //     var ecp = DriverUtils.findElmCountPair(driver,rightColumnLocator);
-  //
-  //     if (ecp.getCount() > 1) {
-  //       LOG.warn("found multiple #rightColumn elements");
-  //     }
-  //
-  //     return ecp.getCount() != 0;
-  // }
-  //
-  // public Optional<String> getBandNameLocation() {
-  //
-  //   var ecp = DriverUtils.findElmCountPair(driver, bandNameLocationLocator);
-  //
-  //   if ( ecp.getCount() == 0 ) {
-  //     LOG.warn("no bandNameLocation");
-  //     return Optional.empty();
-  //   }
-  //
-  //   if ( ecp.getCount() > 1 ) {
-  //     LOG.warn("found multiple #band-name-location elements");
-  //   }
-  //
-  //   WebElement elmBandNameLocation = ecp.getElm();
-  //   ecp = DriverUtils.findElmCountPair(driver, By.cssSelector(".location.secondaryText"));
-  //   if (ecp.getCount() == 0 ) {
-  //     LOG.warn("no location text present");
-  //     return Optional.empty();
-  //   }
-  //   if ( ecp.getCount() > 1 ) {
-  //     LOG.warn("found multiple .location.SecondaryText elements");
-  //   }
-  //
-  //   String text = ecp.getElm().getText();
-  //   return (text == null || text.isEmpty()) ? 
-  //     Optional.empty() 
-  //     : Optional.of(text);
-  //
-  //
-  // } 
+  /**
+   * if track is an album track there will be 2 links and the first
+   * is the album link
+   */
+  public Optional<String> getAlbumUrl() {
+    var elmsLink = driver.findElements(trackAlbumTitleHeaderLinks);
+    if ( elmsLink.size() == 0 ) {
+      LOG.warn("unable to attempt getting album url by " + trackAlbumTitleHeaderLinks);
+      return Optional.empty();
+    }
+    //single
+    if ( elmsLink.size() != 2 ) {
+      return Optional.empty();
+    }
+    //album release : should by the first link
+    String albumLink = elmsLink.get(0).getAttribute("href");
+    if ( UrlUtils.isAlbumURL(albumLink) ) {
+      return Optional.of(albumLink);
+    }
+    return Optional.empty();
+    
+    
+  }
 
+  /**
+   * if track is an album track there will be 2 links and the second
+   * is the artist link, otherwise the only link is the artist link
+   */
+  public Optional<String> getArtistUrl() {
+    var elmsLink = driver.findElements(trackAlbumTitleHeaderLinks);
+    if ( elmsLink.size() == 0 ) {
+      LOG.warn("unable to get artist url by " + trackAlbumTitleHeaderLinks);
+      return Optional.empty();
+    }
+    //single
+    String artistLink;
+    if ( elmsLink.size() == 1 ) {
+      artistLink = elmsLink.get(0).getAttribute("href");
+    //album release
+    } else {
+      if ( elmsLink.size() > 2 ) {
+        LOG.warn("unexpected number of links in " + trackAlbumTitleHeaderLinks);
+      }
+      artistLink = elmsLink.get(1).getAttribute("href");
+    }
+    return Optional.of(artistLink);
+
+  }
 
 }

@@ -1,10 +1,9 @@
 package bandcamp_scraper_core.pages;
 
 
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,11 +17,9 @@ import org.slf4j.LoggerFactory;
 
 import bandcamp_scraper_core.utils.parsing.ParsingUtils;
 import bandcamp_scraper_core.utils.selenium.DriverUtils;
-import bandcamp_scraper_models.Track;
 import bandcamp_scraper_shared.exceptions.http.InvalidResourceUrlException;
 import bandcamp_scraper_shared.utils.http.UrlUtils;
 import bandcamp_scraper_models.Album;
-import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
 public class AlbumPage implements RootModelPage<Album>  {
 
@@ -33,9 +30,16 @@ public class AlbumPage implements RootModelPage<Album>  {
   //May be able to rework with RelativeLocator, but I threw my hands up with it.
   private By digitalAlbumPriceSpanLocator = By.xpath("//button[contains(text(), 'Buy Digital Album')]/following-sibling::span[1]");
   private By trackRowViewTableRowsLocator = By.cssSelector("tr.track_row_view");
+  //Parametric By to isolate Track of interest
+  private Function<Integer,By> trackRowViewTableRowsByNumberLocator = 
+    number -> By.cssSelector(String.format("tr.track_row_view[rel=\"tracknum=%d\"]",number));
 
   public AlbumPage(WebDriver driver) {
     this.driver = driver;
+  }
+
+  public String getOrigin() {
+    return driver.getCurrentUrl();
   }
 
   //TODO : probably should throw if albumTitle is null
@@ -72,110 +76,67 @@ public class AlbumPage implements RootModelPage<Album>  {
 
   }
 
-  public List<Track> getTracks() {
-
+  /** 
+   * Get number of tracks for the album
+   *
+   * Note, doesn't verify the assumption that the WebElement set
+   * maps strictly onto tracks, could use internal verification
+   * by finding each track's individual number entry.
+   */
+  public int extractTrackCount() {
     List<WebElement> elmsTrackRowViewTableRows = driver.findElements(trackRowViewTableRowsLocator);
-    List<Track> tracks = new ArrayList<Track>();
-    for (WebElement elm : elmsTrackRowViewTableRows) {
-
-      Track.TrackBuilder builder = Track.builder();
-
-      extractTrackLink(elm, builder);
-
-      boolean gotTrackNumber = extractTrackNumber(elm, builder);
-      boolean gotTrackTitle = extractTrackTitle(elm, builder);
-      boolean gotTrackTime = extractTrackTime(elm, builder);
-      if (gotTrackNumber || gotTrackTime || gotTrackTitle) {
-        builder.status(HydrationStatus.PARTIAL);
-      }
-
-      tracks.add(builder.build());
-
-    }
-    return tracks;
+    return elmsTrackRowViewTableRows.size();
   }
 
-  /** 
-   * @return : successful extraction
-   */
-  private boolean extractTrackLink(WebElement elm,Track.TrackBuilder builder) {
+  public String extractTrackLink(int number) {
+
+    Optional<WebElement> optElmTrack = getTrackWebElm(number);
+    if (optElmTrack.isEmpty()) {
+      return null;
+    }
 
     //<a href=${link.text}>...</a>
     By trackLinkLocator = By.cssSelector("a[href]");
-
-    var ecpTrackLink = DriverUtils.findElmCountPairFromElm(elm, trackLinkLocator);
+    var ecpTrackLink = DriverUtils.findElmCountPairFromElm(optElmTrack.get(), trackLinkLocator);
     if (ecpTrackLink.getCount() == 0 ) {
-      return false;
+      return null;
     }
     if (ecpTrackLink.getCount() > 1 ) {
       LOG.warn("unexpected numer of elements for " + trackLinkLocator );
     }
     String trackLinkHref = ecpTrackLink.getElm().getAttribute("href");
     if (trackLinkHref == null || trackLinkHref.isEmpty()) {
-      return false;
+      return null;
     }
 
     try {
       if (!UrlUtils.isTrackURL(trackLinkHref)) {
         LOG.warn("Track href found, but failed to validate");
         LOG.warn("Track href : " + trackLinkHref);
-        return false;
+        return null;
       }
-      builder.origin(trackLinkHref);
+      return trackLinkHref;
     } catch (InvalidResourceUrlException ex) {
-      return false;
-    }
-
-    return true;
-
-  }
-
-  /** 
-   * @return : successful extraction
-   */
-  private boolean extractTrackNumber(WebElement elm,Track.TrackBuilder builder) {
-
-    // <div class="track_number secondaryText">${d}.</div>
-    By trackNumberDivLocator = By.className("track_number");
-
-    var ecpTrackNumberDiv = DriverUtils.findElmCountPairFromElm(elm, trackNumberDivLocator);
-    if (ecpTrackNumberDiv.getCount() == 0 ) {
-      LOG.warn("can't find " + trackNumberDivLocator);
-      return false;
-    }
-    if (ecpTrackNumberDiv.getCount() > 1 ) {
-      LOG.warn("unexpected numer of elements for " + trackNumberDivLocator );
-    }
-    String trackNumberText = ecpTrackNumberDiv.getElm().getText();
-    try {
-      Pattern pattern = Pattern.compile("\\b(\\d{1,2})\\.");
-      Matcher matcher = pattern.matcher(trackNumberText);
-      if (!matcher.find()) {
-        LOG.warn("unexpected trackNumber text " + trackNumberText);
-        return false;
-      }
-      int trackNumber = Integer.parseInt(matcher.group(1));
-      builder.number(trackNumber);
-      return true;
-    } catch (NumberFormatException ex) {
-      LOG.warn("number parse exception" + ex.getMessage());
-      return false;
+      return null;
     }
 
   }
 
-  /** 
-   * @return : successful extraction
-   */
-  private boolean extractTrackTitle(WebElement elm,Track.TrackBuilder builder) {
+
+  public String extractTrackTitle(int number) {
+
+    Optional<WebElement> optElmTrack = getTrackWebElm(number);
+    if (optElmTrack.isEmpty()) {
+      return null;
+    }
 
     //<span class="track-title">${Track Title}</span> 
     By trackTitleSpanLocator = By.className("track-title");
 
-    var ecpTrackTitleSpan = DriverUtils.findElmCountPairFromElm(elm, trackTitleSpanLocator);
+    var ecpTrackTitleSpan = DriverUtils.findElmCountPairFromElm(optElmTrack.get(), trackTitleSpanLocator);
     if (ecpTrackTitleSpan.getCount() == 0 ) {
       LOG.warn("can't find " + trackTitleSpanLocator);
-      return false;
+      return null;
     }
     if (ecpTrackTitleSpan.getCount() > 1 ) {
       LOG.warn("unexpected numer of elements for " + trackTitleSpanLocator );
@@ -183,17 +144,18 @@ public class AlbumPage implements RootModelPage<Album>  {
     String trackTitleText = ecpTrackTitleSpan.getElm().getText();
     if (trackTitleText == null || trackTitleText.isEmpty()) {
       LOG.warn("couldn't get track title text");
-      return false;
+      return null;
     }
-    builder.title(trackTitleText);
-    return true;
+    return trackTitleText;
 
   }
 
-  /** 
-   * @return : successful extraction
-   */
-  private boolean extractTrackTime(WebElement elm,Track.TrackBuilder builder) {
+  public Integer extractTrackTime(int number) {
+
+    Optional<WebElement> optElmTrack = getTrackWebElm(number);
+    if (optElmTrack.isEmpty()) {
+      return null;
+    }
 
     //<div class="title">
     //...
@@ -201,7 +163,7 @@ public class AlbumPage implements RootModelPage<Album>  {
     //</div>
     By trackTimeSpanLocator = By.cssSelector("div.title span.time");
 
-    var ecpTrackTimeSpan = DriverUtils.findElmCountPairFromElm(elm, trackTimeSpanLocator);
+    var ecpTrackTimeSpan = DriverUtils.findElmCountPairFromElm(optElmTrack.get(), trackTimeSpanLocator);
 
     if (ecpTrackTimeSpan.getCount() == 0 ) {
       LOG.warn("unexpected numer of elements for " + trackTimeSpanLocator );
@@ -210,12 +172,18 @@ public class AlbumPage implements RootModelPage<Album>  {
     String timeText = ecpTrackTimeSpan.getElm().getText();
     Optional<Integer> elapsed = ParsingUtils.tryParseDurationInSeconds(timeText);
     if (elapsed.isEmpty()) {
-      return false;
+      return null;
     }
-    builder.duration(elapsed.get());
-    return true;
+    return elapsed.get();
 
   }
 
+  private Optional<WebElement> getTrackWebElm(int number) {
+    var ecp = DriverUtils.findElmCountPair(driver,trackRowViewTableRowsByNumberLocator.apply(number));
+    if (ecp.getCount() > 0) {
+      return Optional.of(ecp.getElm());
+    }
+    return Optional.empty();
+  }
 
 }
