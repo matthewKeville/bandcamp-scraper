@@ -1,8 +1,5 @@
-package integration;
+package bandcamp_scraper_core_test.integration;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,10 +11,8 @@ import bandcamp_scraper_core.extraction.RootModelExtractionContext;
 import bandcamp_scraper_core.fetcher.TrackFetcherSingleThread;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
 import bandcamp_scraper_core.pages.TrackPage;
-import bandcamp_scraper_models.RootModelRef;
+import bandcamp_scraper_core_test.fixtures.TrackFixtures;
 import bandcamp_scraper_models.Track;
-import bandcamp_scraper_shared.enums.RootModelType;
-import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
 public class TrackFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Track,TrackPage,Track.TrackBuilder> {
 
@@ -40,15 +35,7 @@ public class TrackFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Track
   protected Stream<Arguments> provideTestCases() {
     return Stream.of(
       Arguments.of(
-        "https://femtanyl.bandcamp.com/track/weightless-2",
-        Track.builder()
-          .title("WEIGHTLESS")
-          .duration(144)
-          .status(HydrationStatus.HYDRATED)
-          .artist(new RootModelRef(RootModelType.ARTIST,"https://femtanyl.bandcamp.com/music"))
-          .album(Optional.of(new RootModelRef(RootModelType.ALBUM,"https://femtanyl.bandcamp.com/album/reactor")))
-          .origin("https://femtanyl.bandcamp.com/track/weightless-2")
-          .build()
+        TrackFixtures.FEMTANYL.REACTOR.WEIGHTLESS_2_URL,TrackFixtures.FEMTANYL.REACTOR.WEIGHTLESS_2_FF.hydrated.get()
       )
     );
   }

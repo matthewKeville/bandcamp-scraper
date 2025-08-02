@@ -1,4 +1,4 @@
-package integration;
+package bandcamp_scraper_core_test.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,10 +33,10 @@ public abstract class AbstractRootModelFetcherIT<M extends RootModel,P extends R
     var fetcher = getFetcher();
     var extractionContext = getExtractionContext();
     M model = fetcher.fetchModel(extractionContext, driverContext, modelUrl);
-    assertThat(expectedModel)
+    assertThat(model)
       .usingRecursiveComparison()
       .as(modelUrl  + "fetches correctly")
-      .isEqualTo(model);
+      .isEqualTo(expectedModel);
   }
 
 }
