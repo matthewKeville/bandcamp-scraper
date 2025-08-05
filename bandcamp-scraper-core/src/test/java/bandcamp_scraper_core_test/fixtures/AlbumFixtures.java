@@ -1,5 +1,6 @@
 package bandcamp_scraper_core_test.fixtures;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -11,9 +12,10 @@ import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 
 public class AlbumFixtures {
 
-  private static AlbumFixtureFactory buildAlbumFixtureFactory(String artistURL,String albumURL,String title,float price,List<TrackFixtureFactory> trackFixtureFactories) {
+  public static record AlbumFixtureFactoryRecord(AlbumFixtureFactory ff, String url){};
+  private static AlbumFixtureFactory buildAlbumFixtureFactory(List<AlbumFixtureFactoryRecord> registry, String artistURL,String albumURL,String title,float price,List<TrackFixtureFactory> trackFixtureFactories) {
 
-    return AlbumFixtureFactory.builder()
+    var aff = AlbumFixtureFactory.builder()
     .dry( () -> 
         Album.builder()
         .origin(albumURL)
@@ -39,6 +41,10 @@ public class AlbumFixtures {
         .build() 
     )
     .build();
+
+    registry.add(new AlbumFixtureFactoryRecord(aff, albumURL));
+
+    return aff;
   }
 
   /**
@@ -48,34 +54,24 @@ public class AlbumFixtures {
 
     //https://femtanyl.bandcamp.com/music
     public static final String ARTIST_URL = "https://femtanyl.bandcamp.com/music";
+      private static final List<AlbumFixtureFactoryRecord> REGISTRY= new ArrayList();
+      public static List<AlbumFixtureFactoryRecord> getAllFactoryRecords() {
+        return REGISTRY;
+      }
 
     public static final String REACTOR_URL = "https://femtanyl.bandcamp.com/album/reactor";
     public static final String REACTOR_TITLE = "REACTOR";
     public static final float REACTOR_PRICE = 7.0f;
-    public static final List<TrackFixtureFactory> REACTOR_TRACK_FACTORIES = List.of(
-       TrackFixtures.FEMTANYL.REACTOR.ITS_TIME_2_FF,
-       TrackFixtures.FEMTANYL.REACTOR.WEIGHTLESS_2_FF,
-       TrackFixtures.FEMTANYL.REACTOR.DINNER_2_FF,
-       TrackFixtures.FEMTANYL.REACTOR.M3_N_MIN3_FEAT_DANNY_BROWN_2_FF,
-       TrackFixtures.FEMTANYL.REACTOR.ATTACKING_VERTICAL_2_FF,
-       TrackFixtures.FEMTANYL.REACTOR.AND_IM_GONE_2_FF
-    );
     public static final AlbumFixtureFactory REACTOR_FF = 
-      buildAlbumFixtureFactory(ARTIST_URL, REACTOR_URL, REACTOR_TITLE, REACTOR_PRICE, REACTOR_TRACK_FACTORIES);
+      buildAlbumFixtureFactory(REGISTRY, ARTIST_URL, REACTOR_URL, REACTOR_TITLE, REACTOR_PRICE, 
+          TrackFixtures.FEMTANYL.REACTOR.getAllFactoryRecords().stream().map(ffr -> ffr.ff()).toList());
 
     public static final String CHASER_URL = "https://femtanyl.bandcamp.com/album/chaser";
     public static final String CHASER_TITLE = "CHASER";
     public static final float CHASER_PRICE = 7.0f;
-    public static final List<TrackFixtureFactory> CHASER_TRACK_FACTORIES = List.of(
-       TrackFixtures.FEMTANYL.CHASER.ACT_RIGHT_3_FF,
-       TrackFixtures.FEMTANYL.CHASER.P3T_2_FF,
-       TrackFixtures.FEMTANYL.CHASER.PUSH_UR_T3MPRR_FF,
-       TrackFixtures.FEMTANYL.CHASER.KATAMARI_2_FF,
-       TrackFixtures.FEMTANYL.CHASER.MURDER_EVERY_1_U_KNOW_FF,
-       TrackFixtures.FEMTANYL.CHASER.GIRL_HELL_1999_FF
-    );
     public static final AlbumFixtureFactory CHASER_FF = 
-      buildAlbumFixtureFactory(ARTIST_URL, CHASER_URL, CHASER_TITLE, CHASER_PRICE, CHASER_TRACK_FACTORIES);
+      buildAlbumFixtureFactory(REGISTRY, ARTIST_URL, CHASER_URL, CHASER_TITLE, CHASER_PRICE, 
+          TrackFixtures.FEMTANYL.CHASER.getAllFactoryRecords().stream().map(ffr -> ffr.ff()).toList());
 
     }
 

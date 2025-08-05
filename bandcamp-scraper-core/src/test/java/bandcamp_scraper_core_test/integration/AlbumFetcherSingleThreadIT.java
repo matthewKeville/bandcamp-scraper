@@ -33,11 +33,7 @@ public class AlbumFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Album
 
   @Override
   protected Stream<Arguments> provideTestCases() {
-    return Stream.of(
-      Arguments.of(AlbumFixtures.FEMTANYL.REACTOR_URL,AlbumFixtures.FEMTANYL.REACTOR_FF.getHydrated().get()),
-      Arguments.of(AlbumFixtures.FEMTANYL.CHASER_URL,AlbumFixtures.FEMTANYL.CHASER_FF.getHydrated().get())
-    );
-
+    return AlbumFixtures.FEMTANYL.getAllFactoryRecords().stream().map( afr -> Arguments.of(afr.url(),afr.ff().hydrated.get()));
   }
 
 }

@@ -33,11 +33,7 @@ public class TrackFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Track
 
   @Override
   protected Stream<Arguments> provideTestCases() {
-    return Stream.of(
-      Arguments.of(
-        TrackFixtures.FEMTANYL.REACTOR.WEIGHTLESS_2_URL,TrackFixtures.FEMTANYL.REACTOR.WEIGHTLESS_2_FF.hydrated.get()
-      )
-    );
+    return TrackFixtures.FEMTANYL.getAllFactoryRecords().stream().map( tfr -> Arguments.of(tfr.url(),tfr.ff().hydrated.get()));
   }
 
 
