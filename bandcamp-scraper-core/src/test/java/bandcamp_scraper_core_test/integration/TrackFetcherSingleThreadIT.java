@@ -1,5 +1,6 @@
 package bandcamp_scraper_core_test.integration;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.provider.Arguments;
@@ -11,6 +12,7 @@ import bandcamp_scraper_core.extraction.RootModelExtractionContext;
 import bandcamp_scraper_core.fetcher.TrackFetcherSingleThread;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
 import bandcamp_scraper_core.pages.TrackPage;
+import bandcamp_scraper_core_test.fixtures.StaticFixtureLoader;
 import bandcamp_scraper_core_test.fixtures.TrackFixtures;
 import bandcamp_scraper_models.Track;
 
@@ -33,6 +35,7 @@ public class TrackFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Track
 
   @Override
   protected Stream<Arguments> provideTestCases() {
+    StaticFixtureLoader.loadFixtures();
     return TrackFixtures.FEMTANYL.getAllFactoryRecords().stream().map( tfr -> Arguments.of(tfr.url(),tfr.ff().hydrated.get()));
   }
 

@@ -1,88 +1,61 @@
-// package bandcamp_scraper_core_test.fixtures;
-//
-// import java.util.List;
-//
-// import bandcamp_scraper_models.Album;
-// import bandcamp_scraper_models.Artist;
-// import bandcamp_scraper_models.HydratableModel.HydrationStatus;
-// import bandcamp_scraper_models.Track;
-//
-// public class ArtistFixtures {
-//
-//   public static class TEENAGE_HALLOWEEN implements ArtistFixtureFactory {
-//
-//     @Override
-//     public Artist get(HydrationStatus albumHydration, boolean trackHydration) {
-//       // TODO Auto-generated method stub
-//       throw new UnsupportedOperationException("Unimplemented method 'get'");
-//     }
-//
-//     @Override
-//     public List<Track> getSingles(HydrationStatus hydration) {
-//       // TODO Auto-generated method stub
-//       throw new UnsupportedOperationException("Unimplemented method 'getSingles'");
-//     }
-//
-//     @Override
-//     public List<Album> getAlbums(HydrationStatus hydration, HydrationStatus trackHydration) {
-//       // TODO Auto-generated method stub
-//       throw new UnsupportedOperationException("Unimplemented method 'getAlbums'");
-//     }
-//
-//     @Override
-//     public List<Track> getTracks(HydrationStatus hydration) {
-//       // TODO Auto-generated method stub
-//       throw new UnsupportedOperationException("Unimplemented method 'getTracks'");
-//     }
-//
-//     // public Artist get(boolean hydratedAlbums, boolean hydratedTracks) {
-//     //   var builder = Artist.builder();
-//     //   builder
-//     //     .name("Teenage Halloween")
-//     //     .location("Asbury Park, New Jersey")
-//     //     .status(HydrationStatus.HYDRATED)
-//     //     .origin("https://teenagehalloween.bandcamp.com/music");
-//     //
-//     //   if ( hydratedReleases ) {
-//     //   }
-//     //   builder
-//     //     .releases(new HashSet<>(Set.of(
-//     //       Release.createFromHref("https://teenagehalloween.bandcamp.com/album/till-you-return"),
-//     //       Release.createFromHref("https://teenagehalloween.bandcamp.com/album/the-homeless-gospel-choir-teenage-halloween"),
-//     //       Release.createFromHref("https://teenagehalloween.bandcamp.com/album/eternal-roast"),
-//     //       Release.createFromHref("https://teenagehalloween.bandcamp.com/album/teenage-halloween")
-//     //     )));
-//     //
-//     //   return Artist.builder().build();
-//     // }
-//
-//   }
-//
-//   public static class FEMTANYL implements ArtistFixtureFactory {
-//
-//     @Override
-//     public Artist get(HydrationStatus albumHydration, boolean trackHydration) {
-//       // TODO Auto-generated method stub
-//       throw new UnsupportedOperationException("Unimplemented method 'get'");
-//     }
-//
-//     @Override
-//     public List<Track> getSingles(HydrationStatus hydration) {
-//       // TODO Auto-generated method stub
-//       throw new UnsupportedOperationException("Unimplemented method 'getSingles'");
-//     }
-//
-//     @Override
-//     public List<Album> getAlbums(HydrationStatus hydration, HydrationStatus trackHydration) {
-//       // TODO Auto-generated method stub
-//       throw new UnsupportedOperationException("Unimplemented method 'getAlbums'");
-//     }
-//
-//     @Override
-//     public List<Track> getTracks(HydrationStatus hydration) {
-//       // TODO Auto-generated method stub
-//       throw new UnsupportedOperationException("Unimplemented method 'getTracks'");
-//     }
-//   }
-//
-// }
+package bandcamp_scraper_core_test.fixtures;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import bandcamp_scraper_core_test.fixtures.AlbumFixtures.AlbumFixtureFactoryRecord;
+import bandcamp_scraper_core_test.fixtures.Fixtures.ArtistFixtureFactory;
+import bandcamp_scraper_core_test.fixtures.TrackFixtures.TrackFixtureFactoryRecord;
+import bandcamp_scraper_models.Artist;
+import bandcamp_scraper_models.HydratableModel.HydrationStatus;
+import bandcamp_scraper_models.Release;
+
+public class ArtistFixtures {
+
+  private static ArtistFixtureFactory buildArtistFixtureFactory(String artistURL,String name,String location,List<AlbumFixtureFactoryRecord> albumFixtureFactoryRecords,List<TrackFixtureFactoryRecord> singleFixtureFactoryRecords) {
+
+    Set<Release> releases = new HashSet<>();
+
+    albumFixtureFactoryRecords.stream()
+      .map( affr -> Release.tryCreateFromHref(affr.url()).get())
+      .forEach( r -> releases.add(r));
+    singleFixtureFactoryRecords.stream()
+      .map( sffr -> Release.tryCreateFromHref(sffr.url()).get())
+      .forEach( r -> releases.add(r));
+
+
+    var aff = ArtistFixtureFactory.builder()
+    .dry( () -> 
+        Artist.builder()
+        .origin(artistURL)
+        .status(HydrationStatus.DRY)
+        .build() 
+    )
+    .hydrated( () ->
+        Artist.builder()
+        .name(name)
+        .releases(releases)
+        .location(location)
+        .origin(artistURL)
+        .status(HydrationStatus.HYDRATED)
+        .build() 
+    )
+    .build();
+
+    return aff;
+  }
+
+  public static final class FEMTANYL {
+    public static final String URL = "https://femtanyl.bandcamp.com/music";
+    public static final String NAME = "Femtanyl";
+    public static final String LOCATION = "Toronto, Ontari";
+    public static final ArtistFixtureFactory FF = 
+      buildArtistFixtureFactory(URL, NAME, LOCATION, 
+          AlbumFixtures.FEMTANYL.getAllFactoryRecords(),
+          TrackFixtures.FEMTANYL.SINGLES.getAllFactoryRecords());
+
+  }
+
+}

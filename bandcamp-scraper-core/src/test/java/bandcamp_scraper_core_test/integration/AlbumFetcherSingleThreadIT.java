@@ -12,6 +12,7 @@ import bandcamp_scraper_core.fetcher.AlbumFetcherSingleThread;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
 import bandcamp_scraper_core.pages.AlbumPage;
 import bandcamp_scraper_core_test.fixtures.AlbumFixtures;
+import bandcamp_scraper_core_test.fixtures.StaticFixtureLoader;
 import bandcamp_scraper_models.Album;
 
 public class AlbumFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Album,AlbumPage,Album.AlbumBuilder> {
@@ -33,6 +34,7 @@ public class AlbumFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Album
 
   @Override
   protected Stream<Arguments> provideTestCases() {
+    StaticFixtureLoader.loadFixtures();
     return AlbumFixtures.FEMTANYL.getAllFactoryRecords().stream().map( afr -> Arguments.of(afr.url(),afr.ff().hydrated.get()));
   }
 

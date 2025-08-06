@@ -25,8 +25,15 @@ public class TrackExtractionContext extends RootModelExtractionContext<Track,Tra
     });
     addExtractionStep((page, builder) -> {
       Optional<String> albumUrl = page.getAlbumUrl();
-      albumUrl.ifPresent( 
-          t -> builder.album(Optional.of(new RootModelRef(RootModelType.ALBUM, t))));
+      if (albumUrl == null) {
+          builder.album(null);
+          return;
+      }
+      if ( albumUrl.isPresent() ) {
+          builder.album(Optional.of(new RootModelRef(RootModelType.ALBUM, albumUrl.get())));
+      } else {
+          builder.album(Optional.empty());
+      }
     });
     addExtractionStep((page, builder) -> {
       Optional<String> artistUrl = page.getArtistUrl();

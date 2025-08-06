@@ -1,9 +1,13 @@
 package bandcamp_scraper_core_test.fixtures;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import com.google.common.collect.Streams;
 
 import bandcamp_scraper_core_test.fixtures.Fixtures.TrackFixtureFactory;
 import bandcamp_scraper_models.RootModelRef;
