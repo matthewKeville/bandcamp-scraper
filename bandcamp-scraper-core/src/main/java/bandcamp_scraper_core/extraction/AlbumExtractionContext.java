@@ -21,30 +21,31 @@ public class AlbumExtractionContext extends RootModelExtractionContext<Album,Alb
   public static final Logger LOG = LoggerFactory.getLogger(AlbumExtractionContext.class);
 
    public AlbumExtractionContext() {
+
     addExtractionStep((page, builder) -> {
-      String albumTitle = page.getAlbumTitle();
-      builder.title(albumTitle);
+      builder.title(page.getAlbumTitle());
     });
+
     addExtractionStep((page, builder) -> {
-      Optional<Float> albumPrice = page.getDigitalAlbumPrice();
-      albumPrice.ifPresent(price -> builder.price(price));
+      builder.price(page.getDigitalAlbumPrice());
     });
+
     addExtractionStep((page, builder) -> {
 
-      int numTracks = page.extractTrackCount();
+      int numTracks = page.getTrackCount();
       List<Album.AlbumTrack> tracks = new ArrayList<Album.AlbumTrack>();
 
       // track numbers are 1-based indexing
       for ( int i = 1; i < numTracks+1; i++ ) {
 
-        String origin = page.extractTrackLink(i);
+        String origin = page.getTrackUrl(i);
         if ( origin == null || origin.isEmpty() ) {
           continue;
         }
 
         Track.TrackBuilder trackBuilder = Track.builder();
-        trackBuilder.title(page.extractTrackTitle(i));
-        trackBuilder.duration(page.extractTrackTime(i));
+        trackBuilder.title(page.getTrackTitle(i));
+        trackBuilder.duration(page.getTrackTime(i));
         trackBuilder.artist(
             new RootModelRef(RootModelType.ARTIST, UrlUtils.getArtistBaseUrl(origin)+"/music")
         );

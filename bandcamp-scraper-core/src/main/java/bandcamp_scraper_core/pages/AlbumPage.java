@@ -42,35 +42,38 @@ public class AlbumPage implements RootModelPage<Album>  {
     return driver.getCurrentUrl();
   }
 
-  //TODO : probably should throw if albumTitle is null
-  public String getAlbumTitle() throws NoSuchElementException {
-    WebElement elmTrackTitle = driver.findElement(trackTitleLocator);
-    String albumTitle = elmTrackTitle.getText();
-    return albumTitle;
+  public String getAlbumTitle() {
+    try {
+      WebElement elmTrackTitle = driver.findElement(trackTitleLocator);
+      return elmTrackTitle.getText();
+    } catch (NoSuchElementException ex) {
+      LOG.warn("Unable to get Album Title with " + trackTitleLocator);
+      return null;
+    }
   }
 
-  public Optional<Float> getDigitalAlbumPrice() {
+  public Float getDigitalAlbumPrice() {
 
     var ecp = DriverUtils.findElmCountPair(driver, digitalAlbumPriceSpanLocator);
     if ( ecp.getCount() == 0 ) {
-      return Optional.empty();
+      return null;
     }
 
     WebElement elmBuyItemDigitalSpan = ecp.getElm();
     if (elmBuyItemDigitalSpan.getText().equals("name your price")) {
-      return Optional.of(0f);
+      return 0f;
     }
 
     //price should be the first <span> within this <span> if not "name your price"
     try {
       WebElement priceSpan = elmBuyItemDigitalSpan.findElement(By.tagName("span"));
       String priceText = priceSpan.getText();
-      return Optional.of(Float.parseFloat(priceText.substring(1)));
+      return Float.parseFloat(priceText.substring(1));
       
     } catch (NoSuchElementException | NumberFormatException | IndexOutOfBoundsException ex ) {
         LOG.warn("buyItemDigitalSpan found, but unable to parse price");
         LOG.warn("threw " + ex.getMessage());
-        return Optional.empty();
+        return null;
     }
 
 
@@ -83,12 +86,12 @@ public class AlbumPage implements RootModelPage<Album>  {
    * maps strictly onto tracks, could use internal verification
    * by finding each track's individual number entry.
    */
-  public int extractTrackCount() {
+  public Integer getTrackCount() {
     List<WebElement> elmsTrackRowViewTableRows = driver.findElements(trackRowViewTableRowsLocator);
     return elmsTrackRowViewTableRows.size();
   }
 
-  public String extractTrackLink(int number) {
+  public String getTrackUrl(int number) {
 
     Optional<WebElement> optElmTrack = getTrackWebElm(number);
     if (optElmTrack.isEmpty()) {
@@ -123,7 +126,7 @@ public class AlbumPage implements RootModelPage<Album>  {
   }
 
 
-  public String extractTrackTitle(int number) {
+  public String getTrackTitle(int number) {
 
     Optional<WebElement> optElmTrack = getTrackWebElm(number);
     if (optElmTrack.isEmpty()) {
@@ -150,7 +153,7 @@ public class AlbumPage implements RootModelPage<Album>  {
 
   }
 
-  public Integer extractTrackTime(int number) {
+  public Integer getTrackTime(int number) {
 
     Optional<WebElement> optElmTrack = getTrackWebElm(number);
     if (optElmTrack.isEmpty()) {

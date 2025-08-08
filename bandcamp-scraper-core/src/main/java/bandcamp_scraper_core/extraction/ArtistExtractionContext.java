@@ -1,6 +1,5 @@
 package bandcamp_scraper_core.extraction;
 
-import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -15,21 +14,20 @@ public class ArtistExtractionContext extends RootModelExtractionContext<Artist,A
   public static final Logger LOG = LoggerFactory.getLogger(ArtistExtractionContext.class);
 
    public ArtistExtractionContext() {
+
     addExtractionStep((page, builder) -> {
-      LOG.info("scraping artistName");
       String artistName = page.getArtistName();
       builder.name(artistName);
     });
+
     addExtractionStep((page, builder) -> {
-      LOG.info("scraping releaseItems");
       Set<Release> releaseItems = page.getReleasesItems();
       builder.releases(releaseItems);
     });
+
     addExtractionStep((page, builder) -> {
       if (page.hasSidebar()) {
-        LOG.info("scraping location");
-        Optional<String> optLocation = page.getBandNameLocation();
-        optLocation.ifPresent( loc -> builder.location(loc));
+        builder.location(page.getBandNameLocation());
       }
     });
   }

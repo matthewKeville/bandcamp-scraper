@@ -2,7 +2,6 @@ package bandcamp_scraper_core.pages;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,11 +32,15 @@ public class ArtistPage implements RootModelPage<Artist> {
     this.driver = driver;
   }
 
-  //TODO : probably should throw if artistName is null
-  public String getArtistName() throws NoSuchElementException {
-    WebElement elmMetaTagSiteName = driver.findElement(elmMetaTagSiteNameLocator);
-    String artistName = elmMetaTagSiteName.getDomAttribute("content");
-    return artistName;
+  public String getArtistName() {
+    try { 
+      WebElement elmMetaTagSiteName = driver.findElement(elmMetaTagSiteNameLocator);
+      String artistName = elmMetaTagSiteName.getDomAttribute("content");
+      return artistName;
+    } catch (NoSuchElementException ex) {
+      LOG.warn("unable to get artist name");
+      return null;
+    }
   }
 
   public Set<Release> getReleasesItems() {
@@ -71,6 +74,7 @@ public class ArtistPage implements RootModelPage<Artist> {
       return releaseItems;
 
     } catch (NoSuchElementException | InvalidResourceUrlException ex ) {
+        LOG.warn("error creating release items for ArtistPage");
         return Collections.emptySet();
     }
 
@@ -87,13 +91,13 @@ public class ArtistPage implements RootModelPage<Artist> {
       return ecp.getCount() != 0;
   }
 
-  public Optional<String> getBandNameLocation() {
+  public String getBandNameLocation() {
 
     var ecp = DriverUtils.findElmCountPair(driver, bandNameLocationLocator);
 
     if ( ecp.getCount() == 0 ) {
       LOG.warn("no bandNameLocation");
-      return Optional.empty();
+      return null;
     }
 
     if ( ecp.getCount() > 1 ) {
@@ -104,16 +108,14 @@ public class ArtistPage implements RootModelPage<Artist> {
     ecp = DriverUtils.findElmCountPair(driver, By.cssSelector(".location.secondaryText"));
     if (ecp.getCount() == 0 ) {
       LOG.warn("no location text present");
-      return Optional.empty();
+      return null;
     }
     if ( ecp.getCount() > 1 ) {
       LOG.warn("found multiple .location.SecondaryText elements");
     }
 
     String text = ecp.getElm().getText();
-    return (text == null || text.isEmpty()) ? 
-      Optional.empty() 
-      : Optional.of(text);
+    return (text == null || text.isEmpty()) ? null : text;
 
 
   } 

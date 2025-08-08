@@ -15,16 +15,18 @@ public class TrackExtractionContext extends RootModelExtractionContext<Track,Tra
   public static final Logger LOG = LoggerFactory.getLogger(TrackExtractionContext.class);
 
    public TrackExtractionContext() {
+
     addExtractionStep((page, builder) -> {
       String trackTitle = page.getTrackTitle();
       builder.title(trackTitle);
     });
+
     addExtractionStep((page, builder) -> {
-      Optional<Integer> trackDuration = page.getTrackTime();
-      trackDuration.ifPresent( t -> builder.duration(t));
+      builder.duration(page.getTrackTime());
     });
+
     addExtractionStep((page, builder) -> {
-      Optional<String> albumUrl = page.getAlbumUrl();
+      Optional<String> albumUrl = page.getTrackAlbumUrl();
       if (albumUrl == null) {
           builder.album(null);
           return;
@@ -35,11 +37,11 @@ public class TrackExtractionContext extends RootModelExtractionContext<Track,Tra
           builder.album(Optional.empty());
       }
     });
+
     addExtractionStep((page, builder) -> {
-      Optional<String> artistUrl = page.getArtistUrl();
-      artistUrl.ifPresent( 
-          t -> builder.artist(new RootModelRef(RootModelType.ARTIST, t)));
+      builder.artist(new RootModelRef(RootModelType.ARTIST, page.getArtistUrl()));
     });
+
   }
 
 }

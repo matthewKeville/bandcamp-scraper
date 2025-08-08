@@ -17,7 +17,7 @@ import lombok.Builder;
 public final class Album extends RootModel {
 
   private String title;
-  private float price;
+  private Float price;
   private List<AlbumTrack> tracks;
 
   /**
@@ -30,7 +30,7 @@ public final class Album extends RootModel {
   @ToString(callSuper = true)
   public static class AlbumTrack implements Model {
     public Track track;
-    public int number;
+    public Integer number;
   }
 
 }

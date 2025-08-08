@@ -25,6 +25,6 @@ public class Track extends RootModel {
   //https://apesofthestate.bandcamp.com/album/they-cant-kill-us-all
   private RootModelRef artist;
   private String title;
-  private int duration;
+  private Integer duration;
 }
 

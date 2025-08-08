@@ -25,7 +25,7 @@ public class AlbumTests extends AbstractSerializationTest<Album>  {
 
           Album.builder()
             .title("I Don't Know How To Explain It")
-            .price(0)
+            .price(0f)
             .tracks(
               List.of(
                 Album.AlbumTrack.builder()

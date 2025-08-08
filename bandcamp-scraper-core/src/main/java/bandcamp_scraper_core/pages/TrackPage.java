@@ -35,11 +35,11 @@ public class TrackPage implements RootModelPage<Track> {
     return trackTitle;
   }
 
-  public Optional<Integer> getTrackTime() {
+  public Integer getTrackTime() {
     ElmCountPair ecp = DriverUtils.findElmCountPair(driver, timeTotalSpanLocator);
     if (ecp.getCount() == 0 ) {
       LOG.warn("couldn't locate track duration by : " + timeTotalSpanLocator);
-      return Optional.empty();
+      return null;
     }
     if (ecp.getCount() > 1 ) {
       LOG.warn("unexpected number of elements for : " + timeTotalSpanLocator);
@@ -53,14 +53,16 @@ public class TrackPage implements RootModelPage<Track> {
       LOG.warn("time_total span's visible text is empty, checking the DOM directly");
       durationText = (String) ((JavascriptExecutor) driver).executeScript("return arguments[0].textContent;", ecp.getElm());
     }
-    return ParsingUtils.tryParseDurationInSeconds(durationText);
+    Optional<Integer> duration = ParsingUtils.tryParseDurationInSeconds(durationText);
+    return duration.isPresent() ? duration.get() : null;
+
   }
 
   /**
    * if track is an album track there will be 2 links and the first
    * is the album link
    */
-  public Optional<String> getAlbumUrl() {
+  public Optional<String> getTrackAlbumUrl() {
     var elmsLink = driver.findElements(trackAlbumTitleHeaderLinks);
     if ( elmsLink.size() == 0 ) {
       LOG.warn("unable to attempt getting album url by " + trackAlbumTitleHeaderLinks);
@@ -84,25 +86,31 @@ public class TrackPage implements RootModelPage<Track> {
    * if track is an album track there will be 2 links and the second
    * is the artist link, otherwise the only link is the artist link
    */
-  public Optional<String> getArtistUrl() {
+  public String getArtistUrl() {
     var elmsLink = driver.findElements(trackAlbumTitleHeaderLinks);
     if ( elmsLink.size() == 0 ) {
       LOG.warn("unable to get artist url by " + trackAlbumTitleHeaderLinks);
-      return Optional.empty();
+      return null;
     }
+
     //single
+
     String artistLink;
     if ( elmsLink.size() == 1 ) {
       artistLink = elmsLink.get(0).getAttribute("href");
+
     //album release
+
     } else {
       if ( elmsLink.size() > 2 ) {
         LOG.warn("unexpected number of links in " + trackAlbumTitleHeaderLinks);
       }
       artistLink = elmsLink.get(1).getAttribute("href");
     }
-    artistLink+="music"; //my domain treats /music as cannonical artist page
-    return Optional.of(artistLink);
+
+    //my domain treats /music as cannonical artist page
+    artistLink+="music"; 
+    return artistLink;
 
   }
 
