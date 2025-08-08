@@ -198,6 +198,7 @@ public class TrackFixtures {
         return REGISTRY_ALBUM;
       }
 
+      // THIS TRACK HIDES THE PLAYER : display: none
       // https://femtanyl.bandcamp.com/track/lottery
       public static final String LOTTERY_URL = "https://femtanyl.bandcamp.com/track/lottery";
       public static final String LOTTERY_TITLE = "LOTTERY";
@@ -205,13 +206,7 @@ public class TrackFixtures {
       public static final TrackFixtureFactory LOTTERY_FF =
         buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), LOTTERY_URL, LOTTERY_TITLE, LOTTERY_DURATION);
 
-      // https://femtanyl.bandcamp.com/track/weightless
-      public static final String WEIGHTLESS_URL = "https://femtanyl.bandcamp.com/track/weightless";
-      public static final String WEIGHTLESS_TITLE = "WEIGHTLESS";
-      public static final int WEIGHTLESS_DURATION = 144;
-      public static final TrackFixtureFactory WEIGHTLESS_FF =
-        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), WEIGHTLESS_URL, WEIGHTLESS_TITLE, WEIGHTLESS_DURATION);
-
+      // THIS TRACK HIDES THE PLAYER : display: none
       // https://femtanyl.bandcamp.com/track/attacking-vertical
       public static final String ATTACKING_VERTICAL_URL = "https://femtanyl.bandcamp.com/track/attacking-vertical";
       public static final String ATTACKING_VERTICAL_TITLE = "ATTACKING VERTICAL";
@@ -219,6 +214,14 @@ public class TrackFixtures {
       public static final TrackFixtureFactory ATTACKING_VERTICAL_FF =
         buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), ATTACKING_VERTICAL_URL, ATTACKING_VERTICAL_TITLE, ATTACKING_VERTICAL_DURATION);
 
+      // https://femtanyl.bandcamp.com/track/mix-02-bothered
+      public static final String MIX_2_BOTHERED_URL = "https://femtanyl.bandcamp.com/track/mix-02-bothered";
+      public static final String MIX_2_BOTHERED_TITLE = "MIX. 02 - BOTHERED!";
+      public static final int MIX_2_BOTHERED_DURATION = 165;
+      public static final TrackFixtureFactory MIX_2_BOTHERED_FF =
+        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), MIX_2_BOTHERED_URL, MIX_2_BOTHERED_TITLE, MIX_2_BOTHERED_DURATION);
+
+      // THIS TRACK HIDES THE PLAYER : display: none
       // https://femtanyl.bandcamp.com/track/its-time
       public static final String ITS_TIME_URL = "https://femtanyl.bandcamp.com/track/its-time";
       public static final String ITS_TIME_TITLE = "ITS TIME";
@@ -232,13 +235,34 @@ public class TrackFixtures {
       public static final int M3_N_MIN3_DURATION = 131;
       public static final TrackFixtureFactory M3_N_MIN3_FF =
         buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), M3_N_MIN3_URL, M3_N_MIN3_TITLE, M3_N_MIN3_DURATION);
+  
+      // https://femtanyl.bandcamp.com/track/worldwide3-feat-zombae
+      public static final String WORLDWID3_URL = "https://femtanyl.bandcamp.com/track/worldwid3-feat-zombae";
+      public static final String WORLDWID3_TITLE = "WORLDWID3 (feat. zombAe)";
+      public static final int WORLDWID3_DURATION = 147;
+      public static final TrackFixtureFactory WORLDWID3_FF =
+        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), WORLDWID3_URL, WORLDWID3_TITLE, WORLDWID3_DURATION);
 
-      // https://femtanyl.bandcamp.com/track/dinner
-      public static final String DINNER_BANG_URL = "https://femtanyl.bandcamp.com/track/dinner";
-      public static final String DINNER_BANG_TITLE = "DINNER!";
-      public static final int DINNER_BANG_DURATION = 136;
-      public static final TrackFixtureFactory DINNER_BANG_FF =
-        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), DINNER_BANG_URL, DINNER_BANG_TITLE, DINNER_BANG_DURATION);
+      // https://femtanyl.bandcamp.com/track/weightless
+      public static final String WEIGHTLESS_URL = "https://femtanyl.bandcamp.com/track/weightless";
+      public static final String WEIGHTLESS_TITLE = "WEIGHTLESS!";
+      public static final int WEIGHTLESS_DURATION = 144;
+      public static final TrackFixtureFactory WEIGHTLESS_FF =
+        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), WEIGHTLESS_URL, WEIGHTLESS_TITLE, WEIGHTLESS_DURATION);
+
+      // https://femtanyl.bandcamp.com/track/mix-01-pickmeup
+      public static final String MIX_1_PICKMEUP_URL = "https://femtanyl.bandcamp.com/track/mix-01-pickmeup";
+      public static final String MIX_1_PICKMEUP_TITLE = "MIX. 01 - PICKMEUP!";
+      public static final int MIX_1_PICKMEUP_DURATION = 204;
+      public static final TrackFixtureFactory MIX_1_PICKMEUP_FF =
+        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), MIX_1_PICKMEUP_URL, MIX_1_PICKMEUP_TITLE, MIX_1_PICKMEUP_DURATION);
+      
+      // https://femtanyl.bandcamp.com/track/and-im-gone
+      public static final String AND_IM_GONE_URL = "https://femtanyl.bandcamp.com/track/and-im-gone";
+      public static final String AND_IM_GONE_TITLE = "AND IM GONE";
+      public static final int AND_IM_GONE_DURATION = 166;
+      public static final TrackFixtureFactory AND_IM_GONE_FF =
+        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), AND_IM_GONE_URL, AND_IM_GONE_TITLE, AND_IM_GONE_DURATION);
 
       // https://femtanyl.bandcamp.com/track/lovesick-cannibal-feat-takihasdied
       public static final String LOVESICK_COMMA_CANNIBAL_BANG_URL = "https://femtanyl.bandcamp.com/track/lovesick-cannibal-feat-takihasdied";
@@ -246,6 +270,13 @@ public class TrackFixtures {
       public static final int LOVESICK_COMMA_CANNIBAL_BANG_DURATION = 116;
       public static final TrackFixtureFactory LOVESICK_COMMA_CANNIBAL_BANG_FF =
         buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), LOVESICK_COMMA_CANNIBAL_BANG_URL, LOVESICK_COMMA_CANNIBAL_BANG_TITLE, LOVESICK_COMMA_CANNIBAL_BANG_DURATION);
+      
+      // https://femtanyl.bandcamp.com/track/dinner
+      public static final String DINNER_BANG_URL = "https://femtanyl.bandcamp.com/track/dinner";
+      public static final String DINNER_BANG_TITLE = "DINNER!";
+      public static final int DINNER_BANG_DURATION = 136;
+      public static final TrackFixtureFactory DINNER_BANG_FF =
+        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), DINNER_BANG_URL, DINNER_BANG_TITLE, DINNER_BANG_DURATION);
 
       // https://femtanyl.bandcamp.com/track/dogmatica
       public static final String DOGMATICA_URL = "https://femtanyl.bandcamp.com/track/dogmatica";
@@ -267,6 +298,48 @@ public class TrackFixtures {
       public static final int KATAMARI_DURATION = 158;
       public static final TrackFixtureFactory KATAMARI_FF =
         buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), KATAMARI_URL, KATAMARI_TITLE, KATAMARI_DURATION);
+
+      // https://femtanyl.bandcamp.com/track/murder-every-1-u-know-feat-takihasdied
+      public static final String MURDER_EVERY_1_U_KNOW_URL = "https://femtanyl.bandcamp.com/track/murder-every-1-u-know-feat-takihasdied";
+      public static final String MURDER_EVERY_1_U_KNOW_TITLE = "MURDER EVERY 1 U KNOW! (feat. takihasdied)";
+      public static final int MURDER_EVERY_1_U_KNOW_DURATION = 125;
+      public static final TrackFixtureFactory MURDER_EVERY_1_U_KNOW_FF =
+        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), MURDER_EVERY_1_U_KNOW_URL, MURDER_EVERY_1_U_KNOW_TITLE, MURDER_EVERY_1_U_KNOW_DURATION);
+
+      // https://femtanyl.bandcamp.com/track/push-ur-t3mpr
+      public static final String PUSH_UR_T3MPR_URL = "https://femtanyl.bandcamp.com/track/push-ur-t3mpr";
+      public static final String PUSH_UR_T3MPR_TITLE = "PUSH UR T3MPR";
+      public static final int PUSH_UR_T3MPR_DURATION = 148;
+      public static final TrackFixtureFactory PUSH_UR_T3MPR_FF =
+        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), PUSH_UR_T3MPR_URL, PUSH_UR_T3MPR_TITLE, PUSH_UR_T3MPR_DURATION);
+
+      // https://femtanyl.bandcamp.com/track/i-might-b3-sick
+      public static final String I_MIGHT_B3_SICK_URL = "https://femtanyl.bandcamp.com/track/i-might-b3-sick";
+      public static final String I_MIGHT_B3_SICK_TITLE = "I MIGHT B3 SICK";
+      public static final int I_MIGHT_B3_SICK_DURATION = 98;
+      public static final TrackFixtureFactory I_MIGHT_B3_SICK_FF =
+        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), I_MIGHT_B3_SICK_URL, I_MIGHT_B3_SICK_TITLE, I_MIGHT_B3_SICK_DURATION);
+      
+      // https://femtanyl.bandcamp.com/track/p3t
+      public static final String P3T_URL = "https://femtanyl.bandcamp.com/track/p3t";
+      public static final String P3T_TITLE = "P3T";
+      public static final int P3T_DURATION = 102;
+      public static final TrackFixtureFactory P3T_FF =
+        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), P3T_URL, P3T_TITLE, P3T_DURATION);
+
+      // https://femtanyl.bandcamp.com/track/act-right-2
+      public static final String ACT_RIGHT_2_URL = "https://femtanyl.bandcamp.com/track/act-right-2";
+      public static final String ACT_RIGHT_2_TITLE = "ACT RIGHT";
+      public static final int ACT_RIGHT_2_DURATION = 144;
+      public static final TrackFixtureFactory ACT_RIGHT_2_FF =
+        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), ACT_RIGHT_2_URL, ACT_RIGHT_2_TITLE, ACT_RIGHT_2_DURATION);
+
+      // https://femtanyl.bandcamp.com/track/s33k-h3lp
+      public static final String S33K_H3LP_URL = "https://femtanyl.bandcamp.com/track/s33k-h3lp";
+      public static final String S33K_H3LP_TITLE = "S33K H3LP";
+      public static final int S33K_H3LP_DURATION = 54;
+      public static final TrackFixtureFactory S33K_H3LP_FF =
+        buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), S33K_H3LP_URL, S33K_H3LP_TITLE, S33K_H3LP_DURATION);
 
     }
 

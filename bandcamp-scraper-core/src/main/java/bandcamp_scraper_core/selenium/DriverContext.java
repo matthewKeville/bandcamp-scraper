@@ -24,4 +24,8 @@ public class DriverContext {
     return new DriverContext(new BasicDriverFactory(DriverFactory.BrowserName.Chrome, true,Duration.ofMillis(500)));
   }
 
+  public static DriverContext getHeadful() {
+    return new DriverContext(new BasicDriverFactory(DriverFactory.BrowserName.Chrome, false,Duration.ofMillis(500)));
+  }
+
 }

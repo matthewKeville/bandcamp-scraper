@@ -31,7 +31,10 @@ public class StaticFixtureLoader {
         Class.forName(cz.getName()); 
         System.out.println("loaded " + cz.getName());
       }
-      catch (Exception e) {}
+      catch (Exception e) {
+        System.out.println("failed to load class");
+        System.out.println(e.getMessage());
+      }
     });
   }
 
@@ -39,7 +42,7 @@ public class StaticFixtureLoader {
   public static void loadFixtures() {
     loadNestedClasses(TrackFixtures.class, 3);
     loadNestedClasses(AlbumFixtures.class, 2);
-    loadNestedClasses(ArtistFixtures.class, 2);
+    loadNestedClasses(ArtistFixtures.class, 1);
   }
 
 }

@@ -50,7 +50,7 @@ public class ArtistFixtures {
   public static final class FEMTANYL {
     public static final String URL = "https://femtanyl.bandcamp.com/music";
     public static final String NAME = "Femtanyl";
-    public static final String LOCATION = "Toronto, Ontari";
+    public static final String LOCATION = "Toronto, Ontario";
     public static final ArtistFixtureFactory FF = 
       buildArtistFixtureFactory(URL, NAME, LOCATION, 
           AlbumFixtures.FEMTANYL.getAllFactoryRecords(),

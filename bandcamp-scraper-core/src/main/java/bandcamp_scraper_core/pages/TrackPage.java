@@ -3,6 +3,7 @@ package bandcamp_scraper_core.pages;
 import java.util.Optional;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -43,7 +44,16 @@ public class TrackPage implements RootModelPage<Track> {
     if (ecp.getCount() > 1 ) {
       LOG.warn("unexpected number of elements for : " + timeTotalSpanLocator);
     }
-    return ParsingUtils.tryParseDurationInSeconds(ecp.getElm().getText());
+
+    // the <div inline_player one-track> could have a hidden class
+    // in such a case the child span is display: none
+    // selenium getText() only returns the visible text
+    String durationText = ecp.getElm().getText();
+    if (durationText.isEmpty()) {
+      LOG.warn("time_total span's visible text is empty, checking the DOM directly");
+      durationText = (String) ((JavascriptExecutor) driver).executeScript("return arguments[0].textContent;", ecp.getElm());
+    }
+    return ParsingUtils.tryParseDurationInSeconds(durationText);
   }
 
   /**
