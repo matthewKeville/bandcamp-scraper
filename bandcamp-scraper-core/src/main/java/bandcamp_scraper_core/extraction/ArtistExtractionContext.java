@@ -1,6 +1,9 @@
 package bandcamp_scraper_core.extraction;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import bandcamp_scraper_core.pages.ArtistPage;
 import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.Release;
+import bandcamp_scraper_models.RootModelRef;
+import bandcamp_scraper_shared.enums.RootModelType;
 
 public class ArtistExtractionContext extends RootModelExtractionContext<Artist,ArtistPage,Artist.ArtistBuilder> {
 
@@ -28,6 +33,18 @@ public class ArtistExtractionContext extends RootModelExtractionContext<Artist,A
     addExtractionStep((page, builder) -> {
       if (page.hasSidebar()) {
         builder.location(page.getBandNameLocation());
+      }
+    });
+    addExtractionStep((page, builder) -> {
+      if (page.hasRecommendations()) {
+        List<String> links = page.getRecomendationPage().getRecomendedLinks();
+        var recs = 
+            links.stream()
+            .map(ln -> new RootModelRef(RootModelType.ARTIST, ln))
+            .collect(Collectors.toSet());
+        builder.recommendations(recs);
+      } else {
+        builder.recommendations(Collections.emptySet());
       }
     });
   }

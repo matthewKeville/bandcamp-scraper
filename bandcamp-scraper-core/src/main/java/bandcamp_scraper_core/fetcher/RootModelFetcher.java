@@ -15,7 +15,7 @@ import bandcamp_scraper_models.RootModel;
  * @param <P> the type of PageModel
  * @param <B> the type of RootModel Builder (lombok workaround)
  */
-public interface RootModelFetcher<M extends RootModel,P extends RootModelPage<M>,B> {
+public interface RootModelFetcher<M extends RootModel,P extends RootModelPage<M>,B> extends Fetcher {
 
   /**
    * Fetches a single model identified by the given URL.

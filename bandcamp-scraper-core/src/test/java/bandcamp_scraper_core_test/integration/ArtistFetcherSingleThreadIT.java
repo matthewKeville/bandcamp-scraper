@@ -2,7 +2,6 @@ package bandcamp_scraper_core_test.integration;
 
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.provider.Arguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +34,8 @@ public class ArtistFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Arti
   @Override
   protected Stream<Arguments> provideTestCases() {
     return Stream.of(
-      Arguments.of(ArtistFixtures.FEMTANYL.URL,ArtistFixtures.FEMTANYL.FF.getHydrated().get())
+      //Arguments.of(ArtistFixtures.FEMTANYL.URL,ArtistFixtures.FEMTANYL.FF.getHydrated().get())
+      Arguments.of(ArtistFixtures.OLD_JAW.URL,ArtistFixtures.OLD_JAW.FF.getHydrated().get())
     );
   }
 

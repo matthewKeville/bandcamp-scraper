@@ -75,5 +75,39 @@ public class AlbumFixtures {
 
     }
 
+
+  public static final class OLD_JAW {
+
+    //https://femtanyl.bandcamp.com/music
+    public static final String ARTIST_URL = "https://oldjaw.bandcamp.com/music";
+      private static final List<AlbumFixtureFactoryRecord> REGISTRY= new ArrayList();
+      public static List<AlbumFixtureFactoryRecord> getAllFactoryRecords() {
+        return REGISTRY;
+      }
+
+    public static final String DEMO_2017_URL = "https://oldjaw.bandcamp.com/album/demo-2017";
+    public static final String DEMO_2017_TITLE = "Demo 2017";
+    public static final float DEMO_2017_PRICE = 0f;
+    public static final AlbumFixtureFactory DEMO_2017_FF = 
+      buildAlbumFixtureFactory(REGISTRY, ARTIST_URL, DEMO_2017_URL, DEMO_2017_TITLE, DEMO_2017_PRICE, 
+          TrackFixtures.OLD_JAW.DEMO_2017.getAllFactoryRecords().stream().map(ffr -> ffr.ff()).toList());
+
+    public static final String OLD_JAW_SELF_TITLED_URL = "https://oldjaw.bandcamp.com/album/old-jaw";
+    public static final String OLD_JAW_SELF_TITLED_TITLE = "Old Jaw";
+    public static final float OLD_JAW_SELF_TITLED_PRICE = 0f;
+    public static final AlbumFixtureFactory OLD_JAW_SELF_TITLED_FF = 
+      buildAlbumFixtureFactory(REGISTRY, ARTIST_URL, OLD_JAW_SELF_TITLED_URL, OLD_JAW_SELF_TITLED_TITLE, OLD_JAW_SELF_TITLED_PRICE, 
+          TrackFixtures.OLD_JAW.OLD_JAW_SELF_TITLED.getAllFactoryRecords().stream().map(ffr -> ffr.ff()).toList());
+
+    public static final String SOPHIES_SONG_URL = "https://oldjaw.bandcamp.com/album/sophies-song";
+    public static final String SOPHIES_SONG_TITLE = "Sophie's Song";
+    public static final float SOPHIES_SONG_PRICE = 0f;
+    public static final AlbumFixtureFactory SOPHIES_SONG_FF = 
+      buildAlbumFixtureFactory(REGISTRY, ARTIST_URL, SOPHIES_SONG_URL, SOPHIES_SONG_TITLE, SOPHIES_SONG_PRICE, 
+          TrackFixtures.OLD_JAW.SOPHIES_SONG.getAllFactoryRecords().stream().map(ffr -> ffr.ff()).toList());
+
+
+    }
+
 }
 

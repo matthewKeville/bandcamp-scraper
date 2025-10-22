@@ -345,4 +345,109 @@ public class TrackFixtures {
 
   }
 
+  public static final class OLD_JAW {
+
+    //https://oldjaw.bandcamp.com/music
+    public static final String ARTIST_URL = "https://oldjaw.bandcamp.com/music";
+    private static final List<TrackFixtureFactoryRecord> REGISTRY_ARTIST = new ArrayList();
+      public static List<TrackFixtureFactoryRecord> getAllFactoryRecords() {
+        return REGISTRY_ARTIST;
+      }
+
+    //https://oldjaw.bandcamp.com/album/demo-2017
+    public static final class DEMO_2017 {
+
+      public static final String ALBUM_URL = "https://oldjaw.bandcamp.com/album/demo-2017";
+      private static final List<TrackFixtureFactoryRecord> REGISTRY_ALBUM = new ArrayList();
+      public static List<TrackFixtureFactoryRecord> getAllFactoryRecords() {
+        return REGISTRY_ALBUM;
+      }
+
+      public static final String LAST_AUGUST_DEMO_URL = "https://oldjaw.bandcamp.com/track/last-august-demo";
+      public static final String LAST_AUGUST_DEMO_TITLE = "Last August (Demo)";
+      public static final int LAST_AUGUST_DEMO_DURATION = 240;
+      public static final TrackFixtureFactory LAST_AUGUST_DEMO_FF =
+       buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), LAST_AUGUST_DEMO_URL, LAST_AUGUST_DEMO_TITLE, LAST_AUGUST_DEMO_DURATION);
+
+      public static final String ALMOST_THERE_DEMO_URL = "https://oldjaw.bandcamp.com/track/almost-there-demo";
+      public static final String ALMOST_THERE_DEMO_TITLE = "Almost There (Demo)";
+      public static final int ALMOST_THERE_DEMO_DURATION = 312;
+      public static final TrackFixtureFactory ALMOST_THERE_DEMO_FF =
+       buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), ALMOST_THERE_DEMO_URL, ALMOST_THERE_DEMO_TITLE, ALMOST_THERE_DEMO_DURATION);
+
+    }
+
+    //https://oldjaw.bandcamp.com/album/sophies-song
+    public static final class SOPHIES_SONG {
+
+      public static final String ALBUM_URL = "https://oldjaw.bandcamp.com/album/sophies-song";
+      private static final List<TrackFixtureFactoryRecord> REGISTRY_ALBUM = new ArrayList();
+      public static List<TrackFixtureFactoryRecord> getAllFactoryRecords() {
+        return REGISTRY_ALBUM;
+      }
+
+      public static final String SOPHIES_SONG_URL = "https://oldjaw.bandcamp.com/track/sophies-song";
+      public static final String SOPHIES_SONG_TITLE = "Sophie's Song";
+      public static final int SOPHIES_SONG_DURATION = 203;
+      public static final TrackFixtureFactory SOPHIES_SONG_FF =
+       buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), SOPHIES_SONG_URL, SOPHIES_SONG_TITLE, SOPHIES_SONG_DURATION);
+
+    }
+
+    //https://oldjaw.bandcamp.com/album/old-jaw
+    public static final class OLD_JAW_SELF_TITLED {
+
+      public static final String ALBUM_URL = "https://oldjaw.bandcamp.com/album/old-jaw";
+      private static final List<TrackFixtureFactoryRecord> REGISTRY_ALBUM = new ArrayList();
+      public static List<TrackFixtureFactoryRecord> getAllFactoryRecords() {
+        return REGISTRY_ALBUM;
+      }
+
+      public static final String EVEN_THE_ROCKS_DO_NOT_RECALL_URL = "https://oldjaw.bandcamp.com/track/even-the-rocks-do-not-recall";
+      public static final String EVEN_THE_ROCKS_DO_NOT_RECALL_TITLE = "Even the Rocks Do Not Recall";
+      public static final int EVEN_THE_ROCKS_DO_NOT_RECALL_DURATION = 255;
+      public static final TrackFixtureFactory EVEN_THE_ROCKS_DO_NOT_RECALL_FF =
+       buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), EVEN_THE_ROCKS_DO_NOT_RECALL_URL, EVEN_THE_ROCKS_DO_NOT_RECALL_TITLE, EVEN_THE_ROCKS_DO_NOT_RECALL_DURATION);
+
+      public static final String LAST_AUGUST_URL = "https://oldjaw.bandcamp.com/track/last-august";
+      public static final String LAST_AUGUST_TITLE = "Last August";
+      public static final int LAST_AUGUST_DURATION = 243;
+      public static final TrackFixtureFactory LAST_AUGUST_FF =
+       buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), LAST_AUGUST_URL, LAST_AUGUST_TITLE, LAST_AUGUST_DURATION);
+
+      public static final String IM_STARTING_TO_THINK_YOURE_REAL_NOW_URL = "https://oldjaw.bandcamp.com/track/im-starting-to-think-youre-real-now";
+      public static final String IM_STARTING_TO_THINK_YOURE_REAL_NOW_TITLE = "I'm Starting to Think You're Real Now";
+      public static final int IM_STARTING_TO_THINK_YOURE_REAL_NOW_DURATION = 248;
+      public static final TrackFixtureFactory IM_STARTING_TO_THINK_YOURE_REAL_NOW_FF =
+       buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), IM_STARTING_TO_THINK_YOURE_REAL_NOW_URL, IM_STARTING_TO_THINK_YOURE_REAL_NOW_TITLE, IM_STARTING_TO_THINK_YOURE_REAL_NOW_DURATION);
+
+      public static final String ALMOST_THERE_URL = "https://oldjaw.bandcamp.com/track/almost-there-2";
+      public static final String ALMOST_THERE_TITLE = "Almost There";
+      public static final int ALMOST_THERE_DURATION = 334;
+      public static final TrackFixtureFactory ALMOST_THERE_FF =
+       buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), ALMOST_THERE_URL, ALMOST_THERE_TITLE, ALMOST_THERE_DURATION);
+
+    }
+
+    public static class SINGLES {
+
+          private static final List<TrackFixtureFactoryRecord> REGISTRY_ALBUM = new ArrayList();
+          public static List<TrackFixtureFactoryRecord> getAllFactoryRecords() {
+            return REGISTRY_ALBUM;
+          }
+
+          public static final String ALMOST_THERE_URL = "https://oldjaw.bandcamp.com/track/almost-there";
+          public static final String ALMOST_THERE_TITLE = "Almost There";
+          public static final int ALMOST_THERE_DURATION = 334;
+          public static final TrackFixtureFactory ALMOST_THERE_FF =
+           buildTrackFixtureFactory(REGISTRY_ARTIST, REGISTRY_ALBUM, ARTIST_URL, Optional.empty(), ALMOST_THERE_URL, ALMOST_THERE_TITLE, ALMOST_THERE_DURATION);
+
+        }
+
+  }
+
+
+
+
+
 }

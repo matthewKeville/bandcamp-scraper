@@ -1,7 +1,3 @@
 alias it-artist-all='mvn -pl bandcamp-scraper-core/ -Dit.test=integration.ArtistFetcherSingleThreadIT verify'
-alias it-artist-teenage-halloween='mvn -pl bandcamp-scraper-core/ -Dit.test=integration.ArtistFetcherSingleThreadIT#getTeenageHalloween verify'
-
 alias it-album-all='mvn -pl bandcamp-scraper-core/ -Dit.test=integration.AlbumFetcherSingleThreadIT verify'
-alias it-album-burn='mvn -pl bandcamp-scraper-core/ -Dit.test=integration.AlbumFetcherSingleThreadIT#getBurnTheEarthLeaveItBehind verify'
-
 alias it-track-all='mvn -pl bandcamp-scraper-core/ -Dit.test=integration.TrackFetcherSingleThreadIT verify'
