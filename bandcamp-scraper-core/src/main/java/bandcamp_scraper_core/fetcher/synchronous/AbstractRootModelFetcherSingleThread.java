@@ -1,4 +1,4 @@
-package bandcamp_scraper_core.fetcher;
+package bandcamp_scraper_core.fetcher.synchronous;
 
 import java.util.List;
 
@@ -10,19 +10,34 @@ import bandcamp_scraper_shared.exceptions.http.InvalidResourceUrlException;
 import bandcamp_scraper_core.exceptions.driver.DriverFactoryException;
 import bandcamp_scraper_core.exceptions.fetching.FetchingException;
 import bandcamp_scraper_core.extraction.RootModelExtractionContext;
+import bandcamp_scraper_core.fetcher.RootModelFetcher;
 import bandcamp_scraper_core.pages.RootModelPage;
 import bandcamp_scraper_core.selenium.DriverContext;
 import bandcamp_scraper_models.RootModel;
 
-public abstract class AbstractRootModelFetcherSingleThread<
-  M extends RootModel,
-  P extends RootModelPage<M>,
-  B
-  > implements RootModelFetcher<M,P,B> {
+/** Note 12/09/2025 
+ *
+ * This class is more than just a "single-threaded" RootModelFetcher. 
+ * It implements a specific workflow for fetching:
+ * 1) Using a pluggable ExtractionContext to populate a model from a page,
+ * 2) Building the model via a builder pattern. 
+ *
+ */
+public abstract class AbstractRootModelFetcherSingleThread<M extends RootModel, P extends RootModelPage<M>, B>
+  implements RootModelFetcher<M> 
+  {
   
   private Logger LOG = getLogger();
+  private final DriverContext driverContext;
+  private final RootModelExtractionContext<M,P,B> extractionContext;
+
+  protected AbstractRootModelFetcherSingleThread(DriverContext driverContext,RootModelExtractionContext extractionContext) {
+    this.driverContext = driverContext;
+    this.extractionContext = extractionContext;
+  }
 
   protected abstract Logger getLogger();
+
   /**
    * determine if the url is appropriate for the derived class's model
    */
@@ -46,15 +61,12 @@ public abstract class AbstractRootModelFetcherSingleThread<
   protected abstract M build(B builder);
 
   @Override
-  public List<M> fetchModels(
-      RootModelExtractionContext<M, P, B> extractionContext,
-      DriverContext driverContext, List<String> urls) throws FetchingException {
+  public List<M> fetchModels(List<String> urls) throws FetchingException {
     throw new UnsupportedOperationException("Unimplemented method 'fetchModels'");
   }
 
   @Override
-  public M fetchModel(RootModelExtractionContext<M, P, B> extractionContext,
-      DriverContext driverContext, String url) throws FetchingException {
+  public M fetchModel(String url) throws FetchingException {
 
     if (!isValidModelUrl(url)) { 
       throw new FetchingException(new InvalidResourceUrlException("URL " + url + " is not a model url")); 

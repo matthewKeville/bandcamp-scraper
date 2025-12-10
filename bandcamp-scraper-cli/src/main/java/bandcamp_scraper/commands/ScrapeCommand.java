@@ -4,7 +4,6 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,19 +12,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import bandcamp_scraper.AppSettings;
 import bandcamp_scraper.logging.ConsoleAwareLogger;
 import bandcamp_scraper_core.exceptions.fetching.FetchingException;
-import bandcamp_scraper_core.extraction.AlbumExtractionContext;
-import bandcamp_scraper_core.extraction.ArtistExtractionContext;
-import bandcamp_scraper_core.extraction.TrackExtractionContext;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
-import bandcamp_scraper_core.pages.AlbumPage;
-import bandcamp_scraper_core.pages.ArtistPage;
-import bandcamp_scraper_core.pages.TrackPage;
 import bandcamp_scraper_models.Album;
 import bandcamp_scraper_models.Artist;
 import bandcamp_scraper_models.Track;
 import bandcamp_scraper_shared.utils.http.UrlUtils;
 import bandcamp_scraper_shared.enums.RootModelType;
-import bandcamp_scraper_core.selenium.DriverContext;
 
 @Component
 @Command(
@@ -37,30 +29,24 @@ import bandcamp_scraper_core.selenium.DriverContext;
 public class ScrapeCommand implements Runnable {
 
     private AppSettings appSettings;
-    private DriverContext driverContext;
-    private RootModelFetcher<Artist,ArtistPage,Artist.ArtistBuilder> artistFetcher;
-    private RootModelFetcher<Album,AlbumPage,Album.AlbumBuilder> albumFetcher;
-    private RootModelFetcher<Track,TrackPage,Track.TrackBuilder> trackFetcher;
+    private RootModelFetcher<Artist> artistFetcher;
+    private RootModelFetcher<Album> albumFetcher;
+    private RootModelFetcher<Track> trackFetcher;
     private ObjectMapper mapper;
 
-    private ArtistExtractionContext artistExtractionContext = new ArtistExtractionContext();
-    private AlbumExtractionContext albumExtractionContext = new AlbumExtractionContext();
-    private TrackExtractionContext trackExtractionContext = new TrackExtractionContext();
     public static ConsoleAwareLogger LOG = ConsoleAwareLogger.getLogger(ScrapeCommand.class);
 
     public ScrapeCommand(
-        @Autowired RootModelFetcher<Artist,ArtistPage,Artist.ArtistBuilder> artistFetcher,
-        @Autowired RootModelFetcher<Album,AlbumPage,Album.AlbumBuilder> albumFetcher,
-        @Autowired RootModelFetcher<Track,TrackPage,Track.TrackBuilder> trackFetcher,
+        @Autowired RootModelFetcher<Artist> artistFetcher,
+        @Autowired RootModelFetcher<Album> albumFetcher,
+        @Autowired RootModelFetcher<Track> trackFetcher,
         @Autowired ObjectMapper objectMapper,
-        @Lazy DriverContext driverContext,
         @Autowired AppSettings appSettings
         ) {
         this.artistFetcher = artistFetcher;
         this.albumFetcher = albumFetcher;
         this.trackFetcher = trackFetcher;
         this.mapper = objectMapper;
-        this.driverContext = driverContext;
         this.appSettings = appSettings;
     }
 
@@ -72,19 +58,19 @@ public class ScrapeCommand implements Runnable {
       try {
         switch ( UrlUtils.resolveResourceModelType(url) ) {
           case RootModelType.ARTIST: {
-            Artist artist = artistFetcher.fetchModel(artistExtractionContext,driverContext,url);
+            Artist artist = artistFetcher.fetchModel(url);
             String json = mapper.writeValueAsString(artist);
             LOG.printOut(json);
             break;
           }
           case RootModelType.ALBUM: {
-            Album album = albumFetcher.fetchModel(albumExtractionContext,driverContext,url);
+            Album album = albumFetcher.fetchModel(url);
             String json = mapper.writeValueAsString(album);
             LOG.printOut(json);
             break;
           }
           case RootModelType.TRACK: {
-            Track track = trackFetcher.fetchModel(trackExtractionContext,driverContext,url);
+            Track track = trackFetcher.fetchModel(url);
             String json = mapper.writeValueAsString(track);
             LOG.printOut(json);
             break;

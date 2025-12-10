@@ -19,13 +19,12 @@ import bandcamp_scraper_models.RootModel;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class AbstractRootModelFetcherTests<M extends RootModel,P extends RootModelPage<M>,B> {
 
-  protected abstract RootModelFetcher<M,P,B> getFetcher();
-  protected abstract RootModelExtractionContext<M,P,B> getExtractionContext();
-  protected final DriverContext driverContext = DriverContext.getDefault();
-
-  protected Logger LOG = provideLogger();
   protected abstract Logger provideLogger();
   protected abstract Stream<String> provideBadUrls();
+  protected abstract RootModelFetcher<M> getFetcher();
+
+  protected final DriverContext driverContext = DriverContext.getDefault();
+  protected Logger LOG = provideLogger();
 
   protected final Stream<String> defaultBadUrls = 
     Stream.of(
@@ -41,14 +40,12 @@ public abstract class AbstractRootModelFetcherTests<M extends RootModel,P extend
     return Stream.concat(defaultBadUrls, provideBadUrls());
   }
 
-
   @ParameterizedTest
   @MethodSource("allBadUrls")
   void throwsFetchingExceptionWhenBadURL(String modelUrl) throws Exception {
     var fetcher = getFetcher();
-    var extractionContext = getExtractionContext();
     assertThrows(FetchingException.class, () -> {
-      fetcher.fetchModel(extractionContext, driverContext, modelUrl);
+      fetcher.fetchModel(modelUrl);
     });
   }
 

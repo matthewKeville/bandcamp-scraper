@@ -7,9 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bandcamp_scraper_core.extraction.ArtistExtractionContext;
-import bandcamp_scraper_core.extraction.RootModelExtractionContext;
-import bandcamp_scraper_core.fetcher.ArtistFetcherSingleThread;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
+import bandcamp_scraper_core.fetcher.synchronous.ArtistFetcherSingleThread;
 import bandcamp_scraper_core.pages.ArtistPage;
 import bandcamp_scraper_core_test.fixtures.ArtistFixtures;
 import bandcamp_scraper_models.Artist;
@@ -17,13 +16,8 @@ import bandcamp_scraper_models.Artist;
 public class ArtistFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Artist,ArtistPage,Artist.ArtistBuilder> {
 
   @Override
-  protected RootModelFetcher<Artist,ArtistPage,Artist.ArtistBuilder> getFetcher() {
-    return new ArtistFetcherSingleThread();
-  }
-
-  @Override
-  protected RootModelExtractionContext<Artist,ArtistPage, Artist.ArtistBuilder> getExtractionContext() {
-    return new ArtistExtractionContext();
+  protected RootModelFetcher<Artist> getFetcher() {
+    return new ArtistFetcherSingleThread(this.driverContext, new ArtistExtractionContext());
   }
 
   @Override

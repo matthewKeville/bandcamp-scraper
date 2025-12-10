@@ -6,22 +6,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bandcamp_scraper_core.extraction.TrackExtractionContext;
-import bandcamp_scraper_core.extraction.RootModelExtractionContext;
-import bandcamp_scraper_core.fetcher.TrackFetcherSingleThread;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
+import bandcamp_scraper_core.fetcher.synchronous.TrackFetcherSingleThread;
 import bandcamp_scraper_core.pages.TrackPage;
 import bandcamp_scraper_models.Track;
 
 public class TrackFetcherSingleThreadTests extends AbstractRootModelFetcherTests<Track,TrackPage,Track.TrackBuilder> {
 
   @Override
-  protected RootModelFetcher<Track,TrackPage,Track.TrackBuilder> getFetcher() {
-    return new TrackFetcherSingleThread();
-  }
-
-  @Override
-  protected RootModelExtractionContext<Track,TrackPage,Track.TrackBuilder> getExtractionContext() {
-    return new TrackExtractionContext();
+  protected RootModelFetcher<Track> getFetcher() {
+    return new TrackFetcherSingleThread(this.driverContext, new TrackExtractionContext());
   }
 
   @Override

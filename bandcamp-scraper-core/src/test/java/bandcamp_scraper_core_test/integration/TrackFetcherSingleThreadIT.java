@@ -2,15 +2,13 @@ package bandcamp_scraper_core_test.integration;
 
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.provider.Arguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import bandcamp_scraper_core.extraction.TrackExtractionContext;
-import bandcamp_scraper_core.extraction.RootModelExtractionContext;
-import bandcamp_scraper_core.fetcher.TrackFetcherSingleThread;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
+import bandcamp_scraper_core.fetcher.synchronous.TrackFetcherSingleThread;
 import bandcamp_scraper_core.pages.TrackPage;
 import bandcamp_scraper_core_test.fixtures.TrackFixtures;
 import bandcamp_scraper_models.Track;
@@ -18,13 +16,8 @@ import bandcamp_scraper_models.Track;
 public class TrackFetcherSingleThreadIT extends AbstractRootModelFetcherIT<Track,TrackPage,Track.TrackBuilder> {
 
   @Override
-  protected RootModelFetcher<Track,TrackPage,Track.TrackBuilder> getFetcher() {
-    return new TrackFetcherSingleThread();
-  }
-
-  @Override
-  protected RootModelExtractionContext<Track,TrackPage, Track.TrackBuilder> getExtractionContext() {
-    return new TrackExtractionContext();
+  protected RootModelFetcher<Track> getFetcher() {
+    return new TrackFetcherSingleThread(this.driverContext, new TrackExtractionContext());
   }
 
   @Override

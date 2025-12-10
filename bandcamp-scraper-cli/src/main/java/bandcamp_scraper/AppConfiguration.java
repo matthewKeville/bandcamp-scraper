@@ -11,10 +11,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import bandcamp_scraper.commands.RootCommand;
 import bandcamp_scraper.commands.ScrapeCommand;
-import bandcamp_scraper_core.fetcher.AlbumFetcherSingleThread;
-import bandcamp_scraper_core.fetcher.ArtistFetcherSingleThread;
+import bandcamp_scraper_core.extraction.AlbumExtractionContext;
+import bandcamp_scraper_core.extraction.ArtistExtractionContext;
+import bandcamp_scraper_core.extraction.RootModelExtractionContext;
+import bandcamp_scraper_core.extraction.TrackExtractionContext;
 import bandcamp_scraper_core.fetcher.RootModelFetcher;
-import bandcamp_scraper_core.fetcher.TrackFetcherSingleThread;
+import bandcamp_scraper_core.fetcher.synchronous.AlbumFetcherSingleThread;
+import bandcamp_scraper_core.fetcher.synchronous.ArtistFetcherSingleThread;
+import bandcamp_scraper_core.fetcher.synchronous.TrackFetcherSingleThread;
 import bandcamp_scraper_core.pages.AlbumPage;
 import bandcamp_scraper_core.pages.ArtistPage;
 import bandcamp_scraper_core.pages.TrackPage;
@@ -38,18 +42,39 @@ public class AppConfiguration {
   public DriverContext driverContext(@Autowired AppSettings appSettings) {
     return new DriverContext(new BasicDriverFactory(appSettings.getBrowserName(),appSettings.isHeadless(),appSettings.getImplicitWait()));
   }
+
+  @Bean 
+  public RootModelExtractionContext<Artist,ArtistPage,Artist.ArtistBuilder> artistExtractionContext() {
+    return new ArtistExtractionContext();
+  }
+  @Bean 
+  public RootModelExtractionContext<Album,AlbumPage,Album.AlbumBuilder> albumExtractionContext() {
+    return new AlbumExtractionContext();
+  }
+  @Bean 
+  public RootModelExtractionContext<Track,TrackPage,Track.TrackBuilder> TrackExtractionContext() {
+    return new TrackExtractionContext();
+  }
+
   @Bean
-  public RootModelFetcher<Artist,ArtistPage,Artist.ArtistBuilder> artistScraper() {
-    return new ArtistFetcherSingleThread();
+  public RootModelFetcher<Artist> artistFetcher(
+      @Autowired DriverContext driverContext,
+      @Autowired RootModelExtractionContext<Artist,ArtistPage,Artist.ArtistBuilder> extractionContext) {
+    return new ArtistFetcherSingleThread(driverContext,extractionContext);
   }
   @Bean
-  public RootModelFetcher<Album,AlbumPage,Album.AlbumBuilder> albumScraper() {
-    return new AlbumFetcherSingleThread();
+  public RootModelFetcher<Album> albumFetcher(
+      @Autowired DriverContext driverContext,
+      @Autowired RootModelExtractionContext<Album,AlbumPage,Album.AlbumBuilder> extractionContext) {
+    return new AlbumFetcherSingleThread(driverContext,extractionContext);
   }
   @Bean
-  public RootModelFetcher<Track,TrackPage,Track.TrackBuilder> trackScraper() {
-    return new TrackFetcherSingleThread();
+  public RootModelFetcher<Track> trackFetcher(
+      @Autowired DriverContext driverContext,
+      @Autowired RootModelExtractionContext<Track,TrackPage,Track.TrackBuilder> extractionContext) {
+    return new TrackFetcherSingleThread(driverContext,extractionContext);
   }
+
   @Bean 
   public ObjectMapper objectMapper() {
     return BandcampObjectMapper.newInstance();

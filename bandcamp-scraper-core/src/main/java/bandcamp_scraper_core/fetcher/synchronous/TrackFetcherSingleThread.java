@@ -1,15 +1,21 @@
-package bandcamp_scraper_core.fetcher;
+package bandcamp_scraper_core.fetcher.synchronous;
 
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bandcamp_scraper_core.extraction.RootModelExtractionContext;
 import bandcamp_scraper_core.pages.TrackPage;
+import bandcamp_scraper_core.selenium.DriverContext;
 import bandcamp_scraper_models.HydratableModel.HydrationStatus;
 import bandcamp_scraper_models.Track;
 import bandcamp_scraper_shared.utils.http.UrlUtils;
 
 public class TrackFetcherSingleThread extends AbstractRootModelFetcherSingleThread<Track,TrackPage,Track.TrackBuilder> {
+
+  public TrackFetcherSingleThread(DriverContext driverContext,RootModelExtractionContext<Track,TrackPage,Track.TrackBuilder> extractionContext) {
+    super(driverContext,extractionContext);
+  }
 
   @Override
   protected Logger getLogger() {
